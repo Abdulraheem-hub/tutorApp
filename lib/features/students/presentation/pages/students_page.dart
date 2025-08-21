@@ -31,13 +31,18 @@ class _StudentsPageState extends State<StudentsPage> {
   final List<Student> _allStudents = [
     Student(
       id: '1',
-      name: 'Sarah Johnson',
+      name: 'Ahmed Hassan',
       grade: Grade.grade8,
       subjects: [const Subject(id: '1', name: 'Mathematics', shortName: 'Math')],
       monthlyFee: 80.0,
       paymentStatus: PaymentStatus.paid,
       nextPaymentDate: DateTime(2024, 1, 15),
       joinDate: DateTime(2023, 9, 1),
+      admissionNumber: '#204001',
+      admissionDate: DateTime(2024, 1, 15),
+      address: 'House 123, Street 5, Gulshan-e-Iqbal, Karachi',
+      phoneNumber: '+92 300 1234567',
+      email: 'ahmed.hassan@email.com',
     ),
     Student(
       id: '2',
@@ -51,6 +56,11 @@ class _StudentsPageState extends State<StudentsPage> {
       paymentStatus: PaymentStatus.pending,
       nextPaymentDate: DateTime(2024, 1, 10),
       joinDate: DateTime(2023, 8, 15),
+      admissionNumber: '#204002',
+      admissionDate: DateTime(2023, 8, 15),
+      address: 'Apartment 45, Block B, DHA Phase 2, Karachi',
+      phoneNumber: '+92 321 9876543',
+      email: 'mike.chen@email.com',
     ),
     Student(
       id: '3',

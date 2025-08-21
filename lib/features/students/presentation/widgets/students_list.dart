@@ -8,6 +8,7 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/student_entities.dart';
 import 'student_card.dart';
+import '../../../../core/constants/app_constants.dart';
 
 class StudentsList extends StatelessWidget {
   final List<Student> students;
@@ -56,7 +57,16 @@ class StudentsList extends StatelessWidget {
       itemCount: students.length,
       separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
-        return StudentCard(student: students[index]);
+        return StudentCard(
+          student: students[index],
+          onTap: () {
+            Navigator.pushNamed(
+              context,
+              AppRoutes.studentDetail,
+              arguments: students[index],
+            );
+          },
+        );
       },
     );
   }

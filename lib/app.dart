@@ -11,6 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'features/dashboard/presentation/bloc/dashboard_bloc.dart';
 import 'features/dashboard/presentation/pages/dashboard_page.dart';
 import 'features/students/presentation/pages/students_page.dart';
+import 'features/students/presentation/pages/student_detail_page.dart';
+import 'features/students/domain/entities/student_entities.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
 
@@ -24,10 +26,23 @@ class TutorPayApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.light,
-      home: BlocProvider(
-        create: (context) => DashboardBloc(),
-        child: const MainScreen(),
-      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => BlocProvider(
+              create: (context) => DashboardBloc(),
+              child: const MainScreen(),
+            ),
+        AppRoutes.studentDetail: (context) => const StudentDetailPage(),
+      },
+      onGenerateRoute: (settings) {
+        if (settings.name == AppRoutes.studentDetail) {
+          final student = settings.arguments as Student;
+          return MaterialPageRoute(
+            builder: (context) => StudentDetailPage(student: student),
+          );
+        }
+        return null;
+      },
       debugShowCheckedModeBanner: false,
     );
   }
