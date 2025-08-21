@@ -8,7 +8,7 @@
 class AppConstants {
   // App Information
   static const String appName = 'TutorPay';
-  static const String appVersion = '1.0.0';
+  static const String appVersion = '2.1.0';
   
   // API Endpoints (when implementing real API)
   static const String baseUrl = 'https://api.tutorpay.com';

@@ -38,16 +38,23 @@ class UserProfileSection extends StatelessWidget {
                 height: 60,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppTheme.textLight.withOpacity(0.2),
+                  gradient: LinearGradient(
+                    colors: [
+                      AppTheme.primaryPurple.withOpacity(0.8),
+                      AppTheme.primaryPurple.withOpacity(0.6),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
                   child: Container(
-                    color: AppTheme.textLight.withOpacity(0.3),
+                    color: AppTheme.primaryPurple.withOpacity(0.1),
                     child: Icon(
                       Icons.person,
                       size: 30,
-                      color: AppTheme.textLight,
+                      color: Colors.white,
                     ),
                   ),
                 ),
