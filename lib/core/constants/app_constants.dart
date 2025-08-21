@@ -41,6 +41,7 @@ class AppRoutes {
   static const String payments = '/payments';
   static const String students = '/students';
   static const String profile = '/profile';
+  static const String settings = '/settings';
   static const String addPayment = '/add-payment';
   static const String addStudent = '/add-student';
   static const String studentDetail = '/student-detail';
