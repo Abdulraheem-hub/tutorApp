@@ -9,6 +9,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:material_color_utilities/material_color_utilities.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Primary brand color - Purple used in the dashboard design (exact match from image)
@@ -46,6 +47,7 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
+      fontFamily: GoogleFonts.inter().fontFamily,
       colorScheme: _lightColorScheme.copyWith(
         surface: backgroundColor, // Light grey background like in image
         onSurface: textDark, // Dark text
@@ -129,6 +131,7 @@ class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
+      fontFamily: GoogleFonts.inter().fontFamily,
       colorScheme: _darkColorScheme,
       
       // App Bar Theme
