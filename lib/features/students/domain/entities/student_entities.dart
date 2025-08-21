@@ -19,6 +19,11 @@ class Student extends Equatable {
   final DateTime? nextPaymentDate;
   final DateTime joinDate;
   final bool isActive;
+  final String? admissionNumber;
+  final DateTime? admissionDate;
+  final String? address;
+  final String? phoneNumber;
+  final String? email;
 
   const Student({
     required this.id,
@@ -31,6 +36,11 @@ class Student extends Equatable {
     this.nextPaymentDate,
     required this.joinDate,
     this.isActive = true,
+    this.admissionNumber,
+    this.admissionDate,
+    this.address,
+    this.phoneNumber,
+    this.email,
   });
 
   @override
@@ -45,6 +55,11 @@ class Student extends Equatable {
         nextPaymentDate,
         joinDate,
         isActive,
+        admissionNumber,
+        admissionDate,
+        address,
+        phoneNumber,
+        email,
       ];
 }
 
@@ -184,4 +199,82 @@ class StudentsData extends Equatable {
         monthlyRevenue,
         statusCounts,
       ];
+}
+
+class Payment extends Equatable {
+  final String id;
+  final String studentId;
+  final double amount;
+  final DateTime paymentDate;
+  final PaymentMethod method;
+  final String description;
+  final PaymentType type;
+
+  const Payment({
+    required this.id,
+    required this.studentId,
+    required this.amount,
+    required this.paymentDate,
+    required this.method,
+    required this.description,
+    required this.type,
+  });
+
+  @override
+  List<Object?> get props => [
+        id,
+        studentId,
+        amount,
+        paymentDate,
+        method,
+        description,
+        type,
+      ];
+}
+
+enum PaymentMethod {
+  cash,
+  card,
+  bankTransfer,
+  digitalWallet,
+}
+
+enum PaymentType {
+  monthlyFee,
+  registrationFee,
+  examFee,
+  extraClass,
+  other,
+}
+
+extension PaymentMethodExtension on PaymentMethod {
+  String get displayName {
+    switch (this) {
+      case PaymentMethod.cash:
+        return 'Cash';
+      case PaymentMethod.card:
+        return 'Card';
+      case PaymentMethod.bankTransfer:
+        return 'Bank Transfer';
+      case PaymentMethod.digitalWallet:
+        return 'Digital Wallet';
+    }
+  }
+}
+
+extension PaymentTypeExtension on PaymentType {
+  String get displayName {
+    switch (this) {
+      case PaymentType.monthlyFee:
+        return 'Monthly Fee';
+      case PaymentType.registrationFee:
+        return 'Registration Fee';
+      case PaymentType.examFee:
+        return 'Exam Fee';
+      case PaymentType.extraClass:
+        return 'Extra Class';
+      case PaymentType.other:
+        return 'Other';
+    }
+  }
 }
