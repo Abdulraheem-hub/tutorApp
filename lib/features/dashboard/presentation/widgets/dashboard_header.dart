@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../settings/presentation/pages/settings_page.dart';
 
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({super.key});
@@ -65,7 +66,11 @@ class DashboardHeader extends StatelessWidget {
               // Settings button
               IconButton(
                 onPressed: () {
-                  // TODO: Navigate to settings
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsPage(),
+                    ),
+                  );
                 },
                 icon: Icon(
                   Icons.settings_outlined,

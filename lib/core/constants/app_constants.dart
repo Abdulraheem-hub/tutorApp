@@ -8,7 +8,7 @@
 class AppConstants {
   // App Information
   static const String appName = 'TutorPay';
-  static const String appVersion = '1.0.0';
+  static const String appVersion = '2.1.0';
   
   // API Endpoints (when implementing real API)
   static const String baseUrl = 'https://api.tutorpay.com';
@@ -41,6 +41,7 @@ class AppRoutes {
   static const String payments = '/payments';
   static const String students = '/students';
   static const String profile = '/profile';
+  static const String settings = '/settings';
   static const String addPayment = '/add-payment';
   static const String addStudent = '/add-student';
   static const String studentDetail = '/student-detail';
