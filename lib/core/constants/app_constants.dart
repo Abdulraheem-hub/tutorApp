@@ -9,26 +9,26 @@ class AppConstants {
   // App Information
   static const String appName = 'TutorPay';
   static const String appVersion = '2.1.0';
-  
+
   // API Endpoints (when implementing real API)
   static const String baseUrl = 'https://api.tutorpay.com';
-  
+
   // Local Storage Keys
   static const String userDataKey = 'user_data';
   static const String themeDataKey = 'theme_data';
   static const String onboardingKey = 'onboarding_completed';
-  
+
   // Dashboard Constants
   static const String currencySymbol = '\$';
   static const int dashboardRefreshInterval = 300; // seconds
-  
+
   // Navigation
   static const int defaultBottomNavIndex = 0;
-  
+
   // Animations
   static const Duration defaultAnimationDuration = Duration(milliseconds: 300);
   static const Duration splashScreenDuration = Duration(seconds: 2);
-  
+
   // Formatting
   static const String dateFormat = 'MMM dd, yyyy';
   static const String timeFormat = 'hh:mm a';
@@ -46,15 +46,16 @@ class AppRoutes {
   static const String addStudent = '/add-student';
   static const String studentDetail = '/student-detail';
   static const String paymentDetail = '/payment-detail';
+  static const String paymentConfirmation = '/payment-confirmation';
 }
 
 class AppAssets {
   // Icons (when we add custom icons)
   static const String iconsPath = 'assets/icons/';
-  
+
   // Images
   static const String imagesPath = 'assets/images/';
-  
+
   // Animations (if we add Lottie files)
   static const String animationsPath = 'assets/animations/';
 }

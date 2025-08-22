@@ -14,6 +14,7 @@ import 'features/students/presentation/pages/students_page.dart';
 import 'features/students/presentation/pages/student_detail_page.dart';
 import 'features/students/presentation/pages/add_student_page.dart';
 import 'features/students/presentation/pages/add_payment_page.dart';
+import 'features/students/presentation/pages/payment_confirmation_page.dart';
 import 'features/students/domain/entities/student_entities.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
@@ -31,12 +32,15 @@ class TutorPayApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => BlocProvider(
-              create: (context) => DashboardBloc(),
-              child: const MainScreen(),
-            ),
+          create: (context) => DashboardBloc(),
+          child: const MainScreen(),
+        ),
+        AppRoutes.students: (context) => const StudentsPage(),
         AppRoutes.studentDetail: (context) => const StudentDetailPage(),
         AppRoutes.addStudent: (context) => const AddStudentPage(),
         AppRoutes.addPayment: (context) => const AddPaymentPage(),
+        AppRoutes.paymentConfirmation: (context) =>
+            const PaymentConfirmationPage(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.studentDetail) {
@@ -49,6 +53,15 @@ class TutorPayApp extends StatelessWidget {
           final student = settings.arguments as Student;
           return MaterialPageRoute(
             builder: (context) => AddPaymentPage(student: student),
+          );
+        }
+        if (settings.name == AppRoutes.paymentConfirmation) {
+          final args = settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder: (context) => PaymentConfirmationPage(
+              payment: args['payment'] as Payment,
+              student: args['student'] as Student,
+            ),
           );
         }
         return null;
@@ -77,10 +90,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _pages),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -117,18 +127,12 @@ class PaymentsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Payments'),
-      ),
+      appBar: AppBar(title: const Text('Payments')),
       body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.payment,
-              size: 64,
-              color: Colors.grey,
-            ),
+            Icon(Icons.payment, size: 64, color: Colors.grey),
             SizedBox(height: 16),
             Text(
               'Payments Page',
@@ -141,10 +145,7 @@ class PaymentsPage extends StatelessWidget {
             SizedBox(height: 8),
             Text(
               'Coming Soon!',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ],
         ),

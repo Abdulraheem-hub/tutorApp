@@ -11,6 +11,8 @@ import '../../../../core/theme/app_theme.dart';
 import '../widgets/settings_section.dart';
 import '../widgets/settings_item.dart';
 import '../widgets/user_profile_section.dart';
+import 'payment_settings_page.dart';
+import 'app_configuration_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -18,7 +20,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
@@ -27,10 +29,7 @@ class SettingsPage extends StatelessWidget {
         scrolledUnderElevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: Icon(
-            Icons.arrow_back,
-            color: theme.colorScheme.onSurface,
-          ),
+          icon: Icon(Icons.arrow_back, color: theme.colorScheme.onSurface),
         ),
         title: Text(
           'Settings',
@@ -48,9 +47,9 @@ class SettingsPage extends StatelessWidget {
           children: [
             // User Profile Section
             const UserProfileSection(),
-            
+
             const SizedBox(height: 24),
-            
+
             // Account Settings Section
             SettingsSection(
               title: 'Account Settings',
@@ -59,17 +58,25 @@ class SettingsPage extends StatelessWidget {
                   icon: Icons.credit_card,
                   iconColor: AppTheme.successColor,
                   iconBackgroundColor: AppTheme.successColor.withOpacity(0.1),
-                  title: 'Payment Settings',
-                  subtitle: 'Manage payment methods',
-                  onTap: () => _showComingSoonDialog(context, 'Payment Settings'),
+                  title: 'Payment Methods',
+                  subtitle: 'Manage payment method labels',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const PaymentSettingsPage(),
+                    ),
+                  ),
                 ),
                 SettingsItem(
                   icon: Icons.settings,
                   iconColor: AppTheme.primaryPurple,
                   iconBackgroundColor: AppTheme.primaryPurple.withOpacity(0.1),
-                  title: 'Configuration',
-                  subtitle: 'App preferences & settings',
-                  onTap: () => _showComingSoonDialog(context, 'Configuration'),
+                  title: 'App Configuration',
+                  subtitle: 'Manage grades and subjects',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const AppConfigurationPage(),
+                    ),
+                  ),
                 ),
                 SettingsItem(
                   icon: Icons.receipt_long,
@@ -77,13 +84,14 @@ class SettingsPage extends StatelessWidget {
                   iconBackgroundColor: const Color(0xFF8B5CF6).withOpacity(0.1),
                   title: 'Receipt Generation',
                   subtitle: 'Customize receipt templates',
-                  onTap: () => _showComingSoonDialog(context, 'Receipt Generation'),
+                  onTap: () =>
+                      _showComingSoonDialog(context, 'Receipt Generation'),
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Support Section
             SettingsSection(
               title: 'Support',
@@ -94,13 +102,14 @@ class SettingsPage extends StatelessWidget {
                   iconBackgroundColor: AppTheme.warningColor.withOpacity(0.1),
                   title: 'Contact Support',
                   subtitle: 'Get help from our team',
-                  onTap: () => _showComingSoonDialog(context, 'Contact Support'),
+                  onTap: () =>
+                      _showComingSoonDialog(context, 'Contact Support'),
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // About Section
             SettingsSection(
               title: '',
@@ -111,7 +120,10 @@ class SettingsPage extends StatelessWidget {
                   iconBackgroundColor: AppTheme.textDark.withOpacity(0.1),
                   title: 'About ${AppConstants.appName}',
                   subtitle: 'Version ${AppConstants.appVersion}',
-                  onTap: () => _showComingSoonDialog(context, 'About ${AppConstants.appName}'),
+                  onTap: () => _showComingSoonDialog(
+                    context,
+                    'About ${AppConstants.appName}',
+                  ),
                 ),
                 SettingsItem(
                   icon: Icons.logout,
@@ -124,7 +136,7 @@ class SettingsPage extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 32),
           ],
         ),
@@ -153,7 +165,9 @@ class SettingsPage extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Sign Out'),
-        content: const Text('Are you sure you want to sign out of your account?'),
+        content: const Text(
+          'Are you sure you want to sign out of your account?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -164,7 +178,9 @@ class SettingsPage extends StatelessWidget {
               Navigator.of(context).pop();
               // TODO: Implement sign out logic
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Sign out functionality coming soon!')),
+                const SnackBar(
+                  content: Text('Sign out functionality coming soon!'),
+                ),
               );
             },
             child: Text(

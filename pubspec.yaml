@@ -59,6 +59,10 @@ dependencies:
   
   # Fonts
   google_fonts: ^6.2.1
+  
+  # File operations and sharing
+  path_provider: ^2.1.4
+  share_plus: ^10.0.2
 
 dev_dependencies:
   flutter_test:

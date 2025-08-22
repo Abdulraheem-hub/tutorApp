@@ -26,7 +26,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
   final _descriptionController = TextEditingController();
-  
+
   Student? _student;
   DateTime _selectedDate = DateTime.now();
   PaymentMethod _selectedPaymentMethod = PaymentMethod.cash;
@@ -96,10 +96,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
     return AppBar(
       title: const Text(
         'Record Payment',
-        style: TextStyle(
-          color: AppTheme.textDark,
-          fontWeight: FontWeight.w600,
-        ),
+        style: TextStyle(color: AppTheme.textDark, fontWeight: FontWeight.w600),
       ),
       backgroundColor: Colors.white,
       elevation: 0,
@@ -169,9 +166,9 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Enrolled Subjects
           const Text(
             'Enrolled Subjects',
@@ -185,26 +182,33 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
           Wrap(
             spacing: 8,
             runSpacing: 6,
-            children: _student!.subjects.map((subject) => Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.white.withOpacity(0.3)),
-              ),
-              child: Text(
-                subject.name,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            )).toList(),
+            children: _student!.subjects
+                .map(
+                  (subject) => Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.white.withOpacity(0.3)),
+                    ),
+                    child: Text(
+                      subject.name,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Monthly Fee Display
           Container(
             padding: const EdgeInsets.all(16),
@@ -224,7 +228,10 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
@@ -348,9 +355,9 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Payment Amount
             const Text(
               'Payment Amount',
@@ -364,9 +371,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
             TextFormField(
               controller: _amountController,
               keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-              ],
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
                 hintText: 'Enter amount',
                 prefixText: AppConstants.currencySymbol,
@@ -381,14 +386,17 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: const BorderSide(color: AppTheme.primaryPurple, width: 2),
+                  borderSide: const BorderSide(
+                    color: AppTheme.primaryPurple,
+                    width: 2,
+                  ),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
               ),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter payment amount';
@@ -400,9 +408,9 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 return null;
               },
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Payment Date
             const Text(
               'Payment Date',
@@ -416,7 +424,10 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
             InkWell(
               onTap: _selectDate,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade300),
                   borderRadius: BorderRadius.circular(12),
@@ -441,9 +452,9 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 20),
-            
+
             // Payment Mode
             const Text(
               'Payment Mode',
@@ -505,7 +516,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
     Color color,
   ) {
     final isSelected = _selectedPaymentMethod == method;
-    
+
     return InkWell(
       onTap: () => setState(() => _selectedPaymentMethod = method),
       child: Container(
@@ -574,10 +585,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
               SizedBox(width: 8),
               Text(
                 'Record Payment',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ],
           ),
@@ -606,7 +614,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         );
       },
     );
-    
+
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
@@ -617,7 +625,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
   void _recordPayment() {
     if (_formKey.currentState?.validate() ?? false) {
       final amount = double.parse(_amountController.text);
-      
+
       // Create payment object (in real app, this would be saved via BLoC/repository)
       final payment = Payment(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -625,28 +633,18 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         amount: amount,
         paymentDate: _selectedDate,
         method: _selectedPaymentMethod,
-        description: _descriptionController.text.isNotEmpty 
-            ? _descriptionController.text 
+        description: _descriptionController.text.isNotEmpty
+            ? _descriptionController.text
             : _selectedPaymentType.displayName,
         type: _selectedPaymentType,
       );
-      
-      // Show success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Payment of ${AppUtils.formatCurrency(amount)} recorded successfully!',
-          ),
-          backgroundColor: AppTheme.successColor,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
+
+      // Navigate to payment confirmation page
+      Navigator.pushNamed(
+        context,
+        '/payment-confirmation',
+        arguments: {'payment': payment, 'student': _student},
       );
-      
-      // Return to previous screen
-      Navigator.pop(context, payment);
     }
   }
 }
