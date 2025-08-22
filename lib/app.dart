@@ -13,6 +13,7 @@ import 'features/dashboard/presentation/pages/dashboard_page.dart';
 import 'features/students/presentation/pages/students_page.dart';
 import 'features/students/presentation/pages/student_detail_page.dart';
 import 'features/students/presentation/pages/add_student_page.dart';
+import 'features/students/presentation/pages/add_payment_page.dart';
 import 'features/students/domain/entities/student_entities.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
@@ -35,12 +36,19 @@ class TutorPayApp extends StatelessWidget {
             ),
         AppRoutes.studentDetail: (context) => const StudentDetailPage(),
         AppRoutes.addStudent: (context) => const AddStudentPage(),
+        AppRoutes.addPayment: (context) => const AddPaymentPage(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.studentDetail) {
           final student = settings.arguments as Student;
           return MaterialPageRoute(
             builder: (context) => StudentDetailPage(student: student),
+          );
+        }
+        if (settings.name == AppRoutes.addPayment) {
+          final student = settings.arguments as Student;
+          return MaterialPageRoute(
+            builder: (context) => AddPaymentPage(student: student),
           );
         }
         return null;
