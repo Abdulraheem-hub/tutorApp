@@ -181,22 +181,16 @@ extension PaymentStatusExtension on PaymentStatus {
 
 class StudentsData extends Equatable {
   final List<Student> students;
-  final int totalStudents;
-  final double monthlyRevenue;
   final Map<PaymentStatus, int> statusCounts;
 
   const StudentsData({
     required this.students,
-    required this.totalStudents,
-    required this.monthlyRevenue,
     required this.statusCounts,
   });
 
   @override
   List<Object?> get props => [
         students,
-        totalStudents,
-        monthlyRevenue,
         statusCounts,
       ];
 }

@@ -11,7 +11,6 @@ import '../../domain/entities/student_entities.dart';
 import '../widgets/students_header.dart';
 import '../widgets/students_search.dart';
 import '../widgets/students_filters.dart';
-import '../widgets/students_stats.dart';
 import '../widgets/students_list.dart';
 import '../../../../core/theme/app_theme.dart';
 
@@ -142,11 +141,6 @@ class _StudentsPageState extends State<StudentsPage> {
   }
 
   StudentsData get _studentsData {
-    final totalStudents = _allStudents.length;
-    final monthlyRevenue = _allStudents
-        .where((s) => s.isActive)
-        .fold(0.0, (sum, student) => sum + student.monthlyFee);
-
     final statusCounts = <PaymentStatus, int>{};
     for (final status in PaymentStatus.values) {
       statusCounts[status] = _allStudents
@@ -156,8 +150,6 @@ class _StudentsPageState extends State<StudentsPage> {
 
     return StudentsData(
       students: _filteredStudents,
-      totalStudents: totalStudents,
-      monthlyRevenue: monthlyRevenue,
       statusCounts: statusCounts,
     );
   }
@@ -190,12 +182,6 @@ class _StudentsPageState extends State<StudentsPage> {
             StudentsFilters(
               selectedFilter: _selectedFilter,
               onFilterChanged: _updateFilter,
-            ),
-
-            // Statistics cards
-            StudentsStats(
-              totalStudents: studentsData.totalStudents,
-              monthlyRevenue: studentsData.monthlyRevenue,
             ),
 
             // Students list
