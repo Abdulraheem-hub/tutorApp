@@ -13,6 +13,7 @@ import '../widgets/students_search.dart';
 import '../widgets/students_filters.dart';
 import '../widgets/students_list.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../core/constants/app_constants.dart';
 
 class StudentsPage extends StatefulWidget {
   const StudentsPage({super.key});
@@ -166,10 +167,7 @@ class _StudentsPageState extends State<StudentsPage> {
             // Header with title and add button
             StudentsHeader(
               onAddPressed: () {
-                // TODO: Navigate to add student page
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Add student feature coming soon!')),
-                );
+                Navigator.pushNamed(context, AppRoutes.addStudent);
               },
             ),
 
