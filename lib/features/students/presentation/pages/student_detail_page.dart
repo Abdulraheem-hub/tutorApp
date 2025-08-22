@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/student_entities.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/app_utils.dart';
+import '../../../../core/constants/app_constants.dart';
 
 class StudentDetailPage extends StatefulWidget {
   final Student? student;
@@ -522,10 +523,10 @@ class _StudentDetailPageState extends State<StudentDetailPage>
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Add payment feature coming soon!'),
-                      ),
+                    Navigator.pushNamed(
+                      context,
+                      AppRoutes.addPayment,
+                      arguments: _student,
                     );
                   },
                   style: ElevatedButton.styleFrom(
