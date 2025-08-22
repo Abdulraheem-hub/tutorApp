@@ -93,6 +93,7 @@ class _StudentDetailPageState extends State<StudentDetailPage>
       body: Column(
         children: [
           _buildProfileSection(),
+          _buildPaymentSummarySection(),
           _buildTabBar(),
           Expanded(
             child: TabBarView(
@@ -318,10 +319,6 @@ class _StudentDetailPageState extends State<StudentDetailPage>
           
           const SizedBox(height: 24),
           
-          _buildPaymentSummarySection(),
-          
-          const SizedBox(height: 24),
-          
           _buildRecentPaymentsSection(),
         ],
       ),
@@ -443,15 +440,16 @@ class _StudentDetailPageState extends State<StudentDetailPage>
     final outstandingAmount = 5000.0; // Mock outstanding amount
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.fromLTRB(20, 8, 20, 8),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
