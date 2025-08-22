@@ -28,8 +28,10 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
   final TextEditingController _nameEnglishController = TextEditingController();
   final TextEditingController _nameUrduController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _admissionNumberController = TextEditingController();
-  final TextEditingController _admissionDateController = TextEditingController();
+  final TextEditingController _admissionNumberController =
+      TextEditingController();
+  final TextEditingController _admissionDateController =
+      TextEditingController();
 
   DateTime? _selectedAdmissionDate;
 
@@ -40,9 +42,10 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
     _nameEnglishController.text = widget.studentData['nameEnglish'] ?? '';
     _nameUrduController.text = widget.studentData['nameUrdu'] ?? '';
     _addressController.text = widget.studentData['address'] ?? '';
-    _admissionNumberController.text = widget.studentData['admissionNumber'] ?? '';
+    _admissionNumberController.text =
+        widget.studentData['admissionNumber'] ?? '';
     _admissionDateController.text = widget.studentData['admissionDate'] ?? '';
-    
+
     if (widget.studentData['admissionDateObj'] != null) {
       _selectedAdmissionDate = widget.studentData['admissionDateObj'];
     }
@@ -67,9 +70,9 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(context).colorScheme.copyWith(
-              primary: AppTheme.primaryPurple,
-            ),
+            colorScheme: Theme.of(
+              context,
+            ).colorScheme.copyWith(primary: AppTheme.primaryPurple),
           ),
           child: child!,
         );
@@ -79,7 +82,8 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
     if (picked != null && picked != _selectedAdmissionDate) {
       setState(() {
         _selectedAdmissionDate = picked;
-        _admissionDateController.text = '${picked.month.toString().padLeft(2, '0')}/${picked.day.toString().padLeft(2, '0')}/${picked.year}';
+        _admissionDateController.text =
+            '${picked.month.toString().padLeft(2, '0')}/${picked.day.toString().padLeft(2, '0')}/${picked.year}';
       });
       widget.onDataChanged('admissionDate', _admissionDateController.text);
       widget.onDataChanged('admissionDateObj', picked);
@@ -106,13 +110,10 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
             const SizedBox(height: 8),
             const Text(
               'Enter the student\'s basic details',
-              style: TextStyle(
-                fontSize: 16,
-                color: AppTheme.textLight,
-              ),
+              style: TextStyle(fontSize: 16, color: AppTheme.textLight),
             ),
             const SizedBox(height: 32),
-            
+
             // Name (English)
             _buildFormField(
               label: 'Name (English)',
@@ -126,9 +127,9 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
               },
               onChanged: (value) => widget.onDataChanged('nameEnglish', value),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Name (Urdu)
             _buildFormField(
               label: 'Name (Urdu)',
@@ -136,9 +137,9 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
               hintText: 'اردو میں نام داخل کریں',
               onChanged: (value) => widget.onDataChanged('nameUrdu', value),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Address
             _buildFormField(
               label: 'Address',
@@ -147,22 +148,23 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
               maxLines: 4,
               onChanged: (value) => widget.onDataChanged('address', value),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Admission Number
             _buildFormField(
               label: 'Admission Number',
               controller: _admissionNumberController,
               hintText: 'Enter admission number',
-              onChanged: (value) => widget.onDataChanged('admissionNumber', value),
+              onChanged: (value) =>
+                  widget.onDataChanged('admissionNumber', value),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // Admission Date
             _buildDateField(),
-            
+
             const SizedBox(height: 40),
           ],
         ),
@@ -195,15 +197,12 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
           validator: validator,
           onChanged: onChanged,
           maxLines: maxLines,
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppTheme.textDark,
-          ),
+          style: const TextStyle(fontSize: 16, color: AppTheme.textDark),
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(
               fontSize: 16,
-              color: AppTheme.textLight.withOpacity(0.7),
+              color: AppTheme.textLight.withValues(alpha: 0.7),
             ),
             contentPadding: EdgeInsets.symmetric(
               horizontal: 16,
@@ -211,15 +210,11 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Colors.grey.withOpacity(0.3),
-              ),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Colors.grey.withOpacity(0.3),
-              ),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -230,9 +225,7 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: AppTheme.errorColor,
-              ),
+              borderSide: const BorderSide(color: AppTheme.errorColor),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -266,15 +259,12 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
           controller: _admissionDateController,
           readOnly: true,
           onTap: _selectAdmissionDate,
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppTheme.textDark,
-          ),
+          style: const TextStyle(fontSize: 16, color: AppTheme.textDark),
           decoration: InputDecoration(
             hintText: 'mm/dd/yyyy',
             hintStyle: TextStyle(
               fontSize: 16,
-              color: AppTheme.textLight.withOpacity(0.7),
+              color: AppTheme.textLight.withValues(alpha: 0.7),
             ),
             suffixIcon: const Icon(
               Icons.calendar_today,
@@ -287,15 +277,11 @@ class _AddStudentBasicInfoState extends State<AddStudentBasicInfo> {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Colors.grey.withOpacity(0.3),
-              ),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: Colors.grey.withOpacity(0.3),
-              ),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),

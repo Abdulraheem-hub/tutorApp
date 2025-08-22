@@ -51,8 +51,9 @@ class AddStudentContactInfo extends StatefulWidget {
 class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  
+
   List<ContactInfo> _contacts = [];
+  final List<Map<String, TextEditingController>> _contactControllers = [];
 
   final List<String> _relationshipOptions = [
     'Father',
@@ -72,38 +73,76 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
     _phoneController.text = widget.studentData['phoneNumber'] ?? '';
     _emailController.text = widget.studentData['email'] ?? '';
     _contacts = (widget.studentData['contacts'] as List<ContactInfo>?) ?? [];
-    
+
     // Add a default contact if none exist
     if (_contacts.isEmpty) {
       _addContact();
+    } else {
+      // Initialize controllers for existing contacts
+      for (int i = 0; i < _contacts.length; i++) {
+        _contactControllers.add(_createContactControllers(_contacts[i]));
+      }
     }
+  }
+
+  Map<String, TextEditingController> _createContactControllers(
+    ContactInfo contact,
+  ) {
+    return {
+      'name': TextEditingController(text: contact.name),
+      'phone': TextEditingController(text: contact.phone),
+      'email': TextEditingController(text: contact.email),
+    };
   }
 
   @override
   void dispose() {
     _phoneController.dispose();
     _emailController.dispose();
+    // Dispose contact controllers
+    for (var controllers in _contactControllers) {
+      controllers['name']?.dispose();
+      controllers['phone']?.dispose();
+      controllers['email']?.dispose();
+    }
     super.dispose();
   }
 
   void _addContact() {
+    final newContact = ContactInfo(
+      name: '',
+      phone: '',
+      email: '',
+      relationship: 'Father',
+    );
+
     setState(() {
-      _contacts.add(ContactInfo(
-        name: '',
-        phone: '',
-        email: '',
-        relationship: 'Father',
-      ));
+      _contacts.add(newContact);
+      _contactControllers.add(_createContactControllers(newContact));
     });
-    widget.onDataChanged('contacts', _contacts);
+
+    // Update parent data after state is set
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onDataChanged('contacts', _contacts);
+    });
   }
 
   void _removeContact(int index) {
     if (_contacts.length > 1) {
+      // Dispose controllers for removed contact
+      _contactControllers[index]['name']?.dispose();
+      _contactControllers[index]['phone']?.dispose();
+      _contactControllers[index]['email']?.dispose();
+
       setState(() {
         _contacts.removeAt(index);
+        _contactControllers.removeAt(index);
       });
-      widget.onDataChanged('contacts', _contacts);
+
+      // Update parent data after state is set
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.onDataChanged('contacts', _contacts);
+      });
     }
   }
 
@@ -124,7 +163,11 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
           break;
       }
     });
-    widget.onDataChanged('contacts', _contacts);
+
+    // Update parent data after state is set
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.onDataChanged('contacts', _contacts);
+    });
   }
 
   @override
@@ -147,21 +190,18 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
             const SizedBox(height: 8),
             const Text(
               'Enter the student\'s contact details',
-              style: TextStyle(
-                fontSize: 16,
-                color: AppTheme.textLight,
-              ),
+              style: TextStyle(fontSize: 16, color: AppTheme.textLight),
             ),
             const SizedBox(height: 32),
-            
+
             // Primary Contact (Student's own contact)
             _buildPrimaryContactSection(),
-            
+
             const SizedBox(height: 32),
-            
+
             // Additional Contacts
             _buildAdditionalContactsSection(),
-            
+
             const SizedBox(height: 40),
           ],
         ),
@@ -177,7 +217,7 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -195,7 +235,7 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
             ),
           ),
           const SizedBox(height: 16),
-          
+
           // Phone Number
           _buildFormField(
             label: 'Phone Number',
@@ -203,16 +243,18 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
             hintText: 'Enter phone number',
             keyboardType: TextInputType.phone,
             validator: (value) {
-              if (value != null && value.isNotEmpty && !AppUtils.isValidPhone(value)) {
+              if (value != null &&
+                  value.isNotEmpty &&
+                  !AppUtils.isValidPhone(value)) {
                 return 'Please enter a valid phone number';
               }
               return null;
             },
             onChanged: (value) => widget.onDataChanged('phoneNumber', value),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // Email
           _buildFormField(
             label: 'Email',
@@ -220,7 +262,9 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
             hintText: 'Enter email address',
             keyboardType: TextInputType.emailAddress,
             validator: (value) {
-              if (value != null && value.isNotEmpty && !AppUtils.isValidEmail(value)) {
+              if (value != null &&
+                  value.isNotEmpty &&
+                  !AppUtils.isValidEmail(value)) {
                 return 'Please enter a valid email address';
               }
               return null;
@@ -240,7 +284,7 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -278,16 +322,18 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
             ],
           ),
           const SizedBox(height: 16),
-          
+
           // Contact List
-          ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: _contacts.length,
-            separatorBuilder: (context, index) => const SizedBox(height: 16),
-            itemBuilder: (context, index) {
-              return _buildContactCard(index);
-            },
+          Column(
+            children: [
+              for (int index = 0; index < _contacts.length; index++) ...[
+                Container(
+                  key: Key('contact_card_$index'),
+                  child: _buildContactCard(index),
+                ),
+                if (index < _contacts.length - 1) const SizedBox(height: 16),
+              ],
+            ],
           ),
         ],
       ),
@@ -296,15 +342,13 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
 
   Widget _buildContactCard(int index) {
     final contact = _contacts[index];
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppTheme.backgroundColor,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: Colors.grey.withOpacity(0.2),
-        ),
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -334,11 +378,11 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
             ],
           ),
           const SizedBox(height: 12),
-          
+
           // Contact Name
           _buildContactField(
             label: 'Name',
-            value: contact.name,
+            controller: _contactControllers[index]['name']!,
             hintText: 'Enter contact name',
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -348,18 +392,18 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
             },
             onChanged: (value) => _updateContact(index, 'name', value),
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Relationship
           _buildRelationshipField(index, contact),
-          
+
           const SizedBox(height: 12),
-          
+
           // Contact Phone
           _buildContactField(
             label: 'Phone',
-            value: contact.phone,
+            controller: _contactControllers[index]['phone']!,
             hintText: 'Enter phone number',
             keyboardType: TextInputType.phone,
             validator: (value) {
@@ -373,17 +417,19 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
             },
             onChanged: (value) => _updateContact(index, 'phone', value),
           ),
-          
+
           const SizedBox(height: 12),
-          
+
           // Contact Email
           _buildContactField(
             label: 'Email',
-            value: contact.email,
+            controller: _contactControllers[index]['email']!,
             hintText: 'Enter email address',
             keyboardType: TextInputType.emailAddress,
             validator: (value) {
-              if (value != null && value.isNotEmpty && !AppUtils.isValidEmail(value)) {
+              if (value != null &&
+                  value.isNotEmpty &&
+                  !AppUtils.isValidEmail(value)) {
                 return 'Please enter a valid email address';
               }
               return null;
@@ -411,18 +457,24 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
         DropdownButtonFormField<String>(
           value: contact.relationship,
           decoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 8,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppTheme.primaryPurple, width: 2),
+              borderSide: const BorderSide(
+                color: AppTheme.primaryPurple,
+                width: 2,
+              ),
             ),
             filled: true,
             fillColor: Colors.white,
@@ -431,10 +483,7 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
           items: _relationshipOptions.map((String relationship) {
             return DropdownMenuItem<String>(
               value: relationship,
-              child: Text(
-                relationship,
-                style: const TextStyle(fontSize: 14),
-              ),
+              child: Text(relationship, style: const TextStyle(fontSize: 14)),
             );
           }).toList(),
           onChanged: (String? newValue) {
@@ -472,28 +521,31 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
           validator: validator,
           onChanged: onChanged,
           keyboardType: keyboardType,
-          style: const TextStyle(
-            fontSize: 16,
-            color: AppTheme.textDark,
-          ),
+          style: const TextStyle(fontSize: 16, color: AppTheme.textDark),
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(
               fontSize: 16,
-              color: AppTheme.textLight.withOpacity(0.7),
+              color: AppTheme.textLight.withValues(alpha: 0.7),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppTheme.primaryPurple, width: 2),
+              borderSide: const BorderSide(
+                color: AppTheme.primaryPurple,
+                width: 2,
+              ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -501,7 +553,10 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppTheme.errorColor, width: 2),
+              borderSide: const BorderSide(
+                color: AppTheme.errorColor,
+                width: 2,
+              ),
             ),
             filled: true,
             fillColor: Colors.white,
@@ -513,7 +568,7 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
 
   Widget _buildContactField({
     required String label,
-    required String value,
+    required TextEditingController controller,
     required String hintText,
     String? Function(String?)? validator,
     Function(String)? onChanged,
@@ -532,32 +587,36 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
         ),
         const SizedBox(height: 4),
         TextFormField(
-          initialValue: value,
+          key: Key('${label.toLowerCase()}_field_${controller.hashCode}'),
+          controller: controller,
           validator: validator,
           onChanged: onChanged,
           keyboardType: keyboardType,
-          style: const TextStyle(
-            fontSize: 14,
-            color: AppTheme.textDark,
-          ),
+          style: const TextStyle(fontSize: 14, color: AppTheme.textDark),
           decoration: InputDecoration(
             hintText: hintText,
             hintStyle: TextStyle(
               fontSize: 14,
-              color: AppTheme.textLight.withOpacity(0.7),
+              color: AppTheme.textLight.withValues(alpha: 0.7),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 8,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppTheme.primaryPurple, width: 2),
+              borderSide: const BorderSide(
+                color: AppTheme.primaryPurple,
+                width: 2,
+              ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -565,7 +624,10 @@ class _AddStudentContactInfoState extends State<AddStudentContactInfo> {
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: const BorderSide(color: AppTheme.errorColor, width: 2),
+              borderSide: const BorderSide(
+                color: AppTheme.errorColor,
+                width: 2,
+              ),
             ),
             filled: true,
             fillColor: Colors.white,

@@ -7,12 +7,10 @@
  */
 
 import 'package:flutter/material.dart';
-import '../../domain/entities/student_entities.dart';
 import '../widgets/add_student_basic_info.dart';
 import '../widgets/add_student_academic_info.dart';
 import '../widgets/add_student_contact_info.dart';
 import '../../../../core/theme/app_theme.dart';
-import '../../../../core/constants/app_constants.dart';
 
 class AddStudentPage extends StatefulWidget {
   const AddStudentPage({super.key});
@@ -24,10 +22,10 @@ class AddStudentPage extends StatefulWidget {
 class _AddStudentPageState extends State<AddStudentPage> {
   final PageController _pageController = PageController();
   int _currentStep = 0;
-  
+
   // Form data storage
   final Map<String, dynamic> _studentData = {};
-  
+
   // Form keys for validation
   final GlobalKey<FormState> _basicFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _academicFormKey = GlobalKey<FormState>();
@@ -35,7 +33,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
 
   final List<String> _stepTitles = [
     'Basic Information',
-    'Academic Details', 
+    'Academic Details',
     'Contact Information',
   ];
 
@@ -60,7 +58,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
           isValid = _contactFormKey.currentState?.validate() ?? false;
           break;
       }
-      
+
       if (isValid) {
         setState(() {
           _currentStep++;
@@ -148,10 +146,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
     return AppBar(
       title: const Text(
         'Add Student',
-        style: TextStyle(
-          color: AppTheme.textDark,
-          fontWeight: FontWeight.w600,
-        ),
+        style: TextStyle(color: AppTheme.textDark, fontWeight: FontWeight.w600),
       ),
       backgroundColor: Colors.white,
       elevation: 0,
@@ -175,10 +170,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
             children: [
               Text(
                 'Step ${_currentStep + 1} of 3',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: AppTheme.textLight,
-                ),
+                style: const TextStyle(fontSize: 16, color: AppTheme.textLight),
               ),
               Text(
                 _stepTitles[_currentStep],
@@ -198,9 +190,9 @@ class _AddStudentPageState extends State<AddStudentPage> {
                   height: 4,
                   margin: EdgeInsets.only(right: index < 2 ? 8 : 0),
                   decoration: BoxDecoration(
-                    color: index <= _currentStep 
-                        ? AppTheme.primaryPurple 
-                        : AppTheme.primaryPurple.withOpacity(0.2),
+                    color: index <= _currentStep
+                        ? AppTheme.primaryPurple
+                        : AppTheme.primaryPurple.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -261,10 +253,7 @@ class _AddStudentPageState extends State<AddStudentPage> {
                 ),
                 child: const Text(
                   'Previous',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: AppTheme.textLight,
-                  ),
+                  style: TextStyle(fontSize: 16, color: AppTheme.textLight),
                 ),
               ),
             ),

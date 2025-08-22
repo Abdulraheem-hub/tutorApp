@@ -14,10 +14,7 @@ import '../../../../core/utils/app_utils.dart';
 class StudentDetailPage extends StatefulWidget {
   final Student? student;
 
-  const StudentDetailPage({
-    super.key,
-    this.student,
-  });
+  const StudentDetailPage({super.key, this.student});
 
   @override
   State<StudentDetailPage> createState() => _StudentDetailPageState();
@@ -78,12 +75,8 @@ class _StudentDetailPageState extends State<StudentDetailPage>
   Widget build(BuildContext context) {
     if (_student == null) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Student Details'),
-        ),
-        body: const Center(
-          child: Text('Student not found'),
-        ),
+        appBar: AppBar(title: const Text('Student Details')),
+        body: const Center(child: Text('Student not found')),
       );
     }
 
@@ -114,10 +107,7 @@ class _StudentDetailPageState extends State<StudentDetailPage>
     return AppBar(
       title: Text(
         'Student Details',
-        style: TextStyle(
-          color: AppTheme.textDark,
-          fontWeight: FontWeight.w600,
-        ),
+        style: TextStyle(color: AppTheme.textDark, fontWeight: FontWeight.w600),
       ),
       backgroundColor: Colors.white,
       elevation: 0,
@@ -144,9 +134,9 @@ class _StudentDetailPageState extends State<StudentDetailPage>
         children: [
           // Profile Picture
           _buildProfilePicture(),
-          
+
           const SizedBox(height: 16),
-          
+
           // Name
           Text(
             _student!.name,
@@ -156,14 +146,14 @@ class _StudentDetailPageState extends State<StudentDetailPage>
               color: AppTheme.textDark,
             ),
           ),
-          
+
           const SizedBox(height: 4),
-          
+
           // Status Badge
           _buildStatusBadge(),
-          
+
           const SizedBox(height: 8),
-          
+
           // Admission Info
           Text(
             'Admission: ${_student!.admissionNumber ?? 'N/A'}',
@@ -280,10 +270,7 @@ class _StudentDetailPageState extends State<StudentDetailPage>
         labelColor: AppTheme.primaryPurple,
         unselectedLabelColor: AppTheme.textLight,
         indicatorColor: AppTheme.primaryPurple,
-        labelStyle: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-        ),
+        labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
         unselectedLabelStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
@@ -308,17 +295,22 @@ class _StudentDetailPageState extends State<StudentDetailPage>
             children: [
               _buildInfoRow('Name (English)', _student!.name),
               _buildInfoRow('Name (Urdu)', 'احمد حسن'), // Mock Urdu name
-              _buildInfoRow('Admission Number', _student!.admissionNumber ?? 'N/A'),
-              _buildInfoRow('Admission Date', 
-                _student!.admissionDate != null 
-                  ? AppUtils.formatDate(_student!.admissionDate!) 
-                  : 'N/A'),
+              _buildInfoRow(
+                'Admission Number',
+                _student!.admissionNumber ?? 'N/A',
+              ),
+              _buildInfoRow(
+                'Admission Date',
+                _student!.admissionDate != null
+                    ? AppUtils.formatDate(_student!.admissionDate!)
+                    : 'N/A',
+              ),
               _buildInfoRow('Address', _student!.address ?? 'N/A'),
             ],
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           _buildRecentPaymentsSection(),
         ],
       ),
@@ -336,9 +328,18 @@ class _StudentDetailPageState extends State<StudentDetailPage>
             children: [
               _buildInfoRow('Grade', _student!.grade.displayName),
               _buildInfoRow('Subjects', _getSubjectsText()),
-              _buildInfoRow('Monthly Fee', AppUtils.formatCurrency(_student!.monthlyFee)),
-              _buildInfoRow('Join Date', AppUtils.formatDate(_student!.joinDate)),
-              _buildInfoRow('Status', _student!.isActive ? 'Active' : 'Inactive'),
+              _buildInfoRow(
+                'Monthly Fee',
+                AppUtils.formatCurrency(_student!.monthlyFee),
+              ),
+              _buildInfoRow(
+                'Join Date',
+                AppUtils.formatDate(_student!.joinDate),
+              ),
+              _buildInfoRow(
+                'Status',
+                _student!.isActive ? 'Active' : 'Inactive',
+              ),
             ],
           ),
         ],
@@ -522,7 +523,9 @@ class _StudentDetailPageState extends State<StudentDetailPage>
                 child: ElevatedButton(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Add payment feature coming soon!')),
+                      const SnackBar(
+                        content: Text('Add payment feature coming soon!'),
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -554,7 +557,9 @@ class _StudentDetailPageState extends State<StudentDetailPage>
                 child: ElevatedButton(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('View payments feature coming soon!')),
+                      const SnackBar(
+                        content: Text('View payments feature coming soon!'),
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -619,7 +624,9 @@ class _StudentDetailPageState extends State<StudentDetailPage>
               TextButton(
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('View all payments coming soon!')),
+                    const SnackBar(
+                      content: Text('View all payments coming soon!'),
+                    ),
                   );
                 },
                 child: Text(
@@ -633,7 +640,9 @@ class _StudentDetailPageState extends State<StudentDetailPage>
             ],
           ),
           const SizedBox(height: 16),
-          ...(_mockPayments.take(2).map((payment) => _buildPaymentItem(payment))),
+          ...(_mockPayments
+              .take(2)
+              .map((payment) => _buildPaymentItem(payment))),
         ],
       ),
     );

@@ -254,11 +254,11 @@ class _AddStudentAcademicInfoState extends State<AddStudentAcademicInfo> {
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -304,7 +304,7 @@ class _AddStudentAcademicInfoState extends State<AddStudentAcademicInfo> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border.all(color: Colors.grey.withOpacity(0.3)),
+              border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -317,7 +317,7 @@ class _AddStudentAcademicInfoState extends State<AddStudentAcademicInfo> {
                     style: TextStyle(
                       fontSize: 16,
                       color: _selectedSubjects.isEmpty 
-                          ? AppTheme.textLight.withOpacity(0.7)
+                          ? AppTheme.textLight.withValues(alpha: 0.7)
                           : AppTheme.textDark,
                     ),
                   ),
@@ -367,16 +367,16 @@ class _AddStudentAcademicInfoState extends State<AddStudentAcademicInfo> {
             hintText: hintText,
             hintStyle: TextStyle(
               fontSize: 16,
-              color: AppTheme.textLight.withOpacity(0.7),
+              color: AppTheme.textLight.withValues(alpha: 0.7),
             ),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -429,7 +429,7 @@ class _AddStudentAcademicInfoState extends State<AddStudentAcademicInfo> {
             hintText: 'mm/dd/yyyy',
             hintStyle: TextStyle(
               fontSize: 16,
-              color: AppTheme.textLight.withOpacity(0.7),
+              color: AppTheme.textLight.withValues(alpha: 0.7),
             ),
             suffixIcon: const Icon(
               Icons.calendar_today,
@@ -439,11 +439,11 @@ class _AddStudentAcademicInfoState extends State<AddStudentAcademicInfo> {
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -473,7 +473,7 @@ class _AddStudentAcademicInfoState extends State<AddStudentAcademicInfo> {
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            border: Border.all(color: Colors.grey.withOpacity(0.3)),
+            border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
             borderRadius: BorderRadius.circular(12),
           ),
           child: SwitchListTile(
