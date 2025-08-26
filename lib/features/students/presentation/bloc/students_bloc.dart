@@ -58,11 +58,16 @@ class StudentsBloc extends Bloc<StudentsEvent, StudentsState> {
       }
     } on AppException catch (e) {
       print('❌ StudentsBloc: AppException caught - ${e.message}');
-      emit(StudentsError(message: e.message, errorCode: e.code));
+      // Provide more specific error message for authentication issues
+      String userFriendlyMessage = e.message;
+      if (e.code == 'USER_NOT_AUTHENTICATED') {
+        userFriendlyMessage = 'Please sign in to view your students. The app will retry automatically.';
+      }
+      emit(StudentsError(message: userFriendlyMessage, errorCode: e.code));
     } catch (e) {
       print('❌ StudentsBloc: Unexpected error caught - $e');
       print('❌ StudentsBloc: Error type - ${e.runtimeType}');
-      emit(StudentsError(message: 'Failed to load students: ${e.toString()}'));
+      emit(StudentsError(message: 'An unexpected error occurred while fetching students. Please try again.'));
     }
   }
 

@@ -24,9 +24,14 @@ class FirestoreStudentsRepository implements StudentsRepository {
   String get _currentUserId {
     final userId = FirebaseService.instance.auth.currentUser?.uid;
     if (userId == null) {
-      // For testing purposes, use a default user ID
-      return 'test-user-123';
+      print('❌ FirestoreStudentsRepository: No authenticated user found');
+      // Throw a more specific error instead of falling back to test user
+      throw DataException(
+        message: 'User not authenticated. Please sign in to access student data.',
+        code: 'USER_NOT_AUTHENTICATED',
+      );
     }
+    print('🔐 FirestoreStudentsRepository: Using authenticated user ID: $userId');
     return userId;
   }
 

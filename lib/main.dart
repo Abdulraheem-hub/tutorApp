@@ -16,14 +16,24 @@ import 'app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  try {
+    // Initialize Firebase
+    print('🚀 Initializing Firebase...');
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Initialize Firebase services
-  await FirebaseService.instance.initialize();
+    // Initialize Firebase services and wait for auth
+    print('🚀 Initializing Firebase services...');
+    await FirebaseService.instance.initialize();
 
-  // Initialize dependency injection
-  await initializeDependencies();
+    // Initialize dependency injection
+    print('🚀 Initializing dependencies...');
+    await initializeDependencies();
+
+    print('✅ All services initialized successfully');
+  } catch (e) {
+    print('❌ Failed to initialize app services: $e');
+    // Still run the app but user will see appropriate error messages
+  }
 
   // Quick test to check latest student in Firestore (disabled in production)
   // await _checkLatestStudent();
