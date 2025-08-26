@@ -85,12 +85,54 @@ class _StudentsPageState extends State<StudentsPage> {
                         ),
                       );
                     } else if (state is StudentsLoaded) {
-                      // Convert StudentEntity to Student for UI
-                      final students = state.filteredStudents
-                          .map((entity) => StudentMapper.fromEntity(entity))
-                          .toList();
+                      // Convert StudentEntity to Student for UI with error handling
+                      try {
+                        final students = state.filteredStudents
+                            .map((entity) => StudentMapper.fromEntity(entity))
+                            .toList();
 
-                      return StudentsList(students: students);
+                        return StudentsList(students: students);
+                      } catch (e) {
+                        // Handle conversion errors
+                        print('❌ Error converting StudentEntity to Student: $e');
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.error_outline,
+                                size: 64,
+                                color: AppTheme.errorColor,
+                              ),
+                              const SizedBox(height: 16),
+                              const Text(
+                                'Error displaying students',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppTheme.errorColor,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Conversion error: ${e.toString()}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: AppTheme.errorColor,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton(
+                                onPressed: () {
+                                  context.read<StudentsBloc>().add(const LoadStudents());
+                                },
+                                child: const Text('Reload'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     } else if (state is StudentsEmpty) {
                       return const Center(
                         child: Column(
@@ -163,6 +205,87 @@ class _StudentsPageState extends State<StudentsPage> {
                                 'Retry',
                                 style: TextStyle(color: Colors.white),
                               ),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (state is StudentOperationInProgress) {
+                      // Show loading during operations like add/update/delete
+                      return const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(
+                              color: AppTheme.primaryPurple,
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              'Processing...',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppTheme.textLight,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (state is StudentOperationSuccess) {
+                      // Show success state briefly
+                      return const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.check_circle,
+                              size: 64,
+                              color: AppTheme.successColor,
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              'Operation completed successfully',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppTheme.textDark,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else if (state is StudentOperationFailure) {
+                      // Show operation failure
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.error_outline,
+                              size: 64,
+                              color: AppTheme.errorColor,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Operation Failed',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: AppTheme.errorColor,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              state.message,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: AppTheme.errorColor,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 16),
+                            ElevatedButton(
+                              onPressed: () {
+                                context.read<StudentsBloc>().add(const LoadStudents());
+                              },
+                              child: const Text('Try Again'),
                             ),
                           ],
                         ),
