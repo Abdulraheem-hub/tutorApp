@@ -175,6 +175,18 @@ class _DeveloperToolsPageState extends State<DeveloperToolsPage> {
           ),
           const SizedBox(height: 16),
           _buildActionButton(
+            title: 'Clear Test Data Only',
+            description:
+                'Remove only test/sample data (keeps real student data)',
+            icon: Icons.cleaning_services,
+            color: Colors.orange,
+            isLoading: _isClearing,
+            onPressed: _isPopulating || _isClearing
+                ? null
+                : _clearTestDataOnly,
+          ),
+          const SizedBox(height: 16),
+          _buildActionButton(
             title: 'Clear All Data',
             description:
                 'Remove all existing students, payments, and analytics data',
@@ -533,6 +545,52 @@ class _DeveloperToolsPageState extends State<DeveloperToolsPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error clearing data: $e'),
+            backgroundColor: Colors.red,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isClearing = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _clearTestDataOnly() async {
+    setState(() {
+      _isClearing = true;
+      _statusMessage = 'Clearing test data only... Please wait.';
+    });
+
+    try {
+      await DataCleanupUtility.clearTestDataOnly();
+
+      if (mounted) {
+        setState(() {
+          _statusMessage =
+              '🧪 Test data cleared successfully! Real user data preserved.';
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Test data cleared successfully!'),
+            backgroundColor: Colors.orange,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _statusMessage = '❌ Error clearing test data: $e';
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error clearing test data: $e'),
             backgroundColor: Colors.red,
             behavior: SnackBarBehavior.floating,
           ),
