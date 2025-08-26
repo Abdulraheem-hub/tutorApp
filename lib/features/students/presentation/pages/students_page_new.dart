@@ -7,6 +7,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/students_header.dart';
 import '../widgets/students_search.dart';
 import '../widgets/students_filters.dart';
@@ -18,6 +19,7 @@ import '../utils/student_mapper.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/di/dependency_injection.dart';
+import '../../../../core/services/firebase_service.dart';
 
 class StudentsPage extends StatefulWidget {
   const StudentsPage({super.key});
@@ -28,12 +30,35 @@ class StudentsPage extends StatefulWidget {
 
 class _StudentsPageState extends State<StudentsPage> {
   String _selectedFilter = 'All';
+  late StudentsBloc _studentsBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _studentsBloc = serviceLocator<StudentsBloc>();
+    
+    // Listen for auth state changes and retry loading when user is authenticated
+    FirebaseService.instance.auth.authStateChanges().listen((User? user) {
+      if (user != null) {
+        print('🔐 StudentsPage: User authenticated, loading students...');
+        _studentsBloc.add(const LoadStudents());
+      }
+    });
+
+    // Load students initially
+    _studentsBloc.add(const LoadStudents());
+  }
+
+  @override
+  void dispose() {
+    _studentsBloc.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          serviceLocator<StudentsBloc>()..add(const LoadStudents()),
+    return BlocProvider.value(
+      value: _studentsBloc,
       child: Scaffold(
         backgroundColor: AppTheme.backgroundColor,
         body: SafeArea(
@@ -49,7 +74,7 @@ class _StudentsPageState extends State<StudentsPage> {
               // Search bar
               StudentsSearch(
                 onSearchChanged: (query) {
-                  context.read<StudentsBloc>().add(SearchStudents(query));
+                  _studentsBloc.add(SearchStudents(query));
                 },
               ),
 
@@ -70,7 +95,7 @@ class _StudentsPageState extends State<StudentsPage> {
                     default:
                       blocFilter = 'all';
                   }
-                  context.read<StudentsBloc>().add(FilterStudents(blocFilter));
+                  _studentsBloc.add(FilterStudents(blocFilter));
                 },
               ),
 
@@ -125,7 +150,7 @@ class _StudentsPageState extends State<StudentsPage> {
                               const SizedBox(height: 16),
                               ElevatedButton(
                                 onPressed: () {
-                                  context.read<StudentsBloc>().add(const LoadStudents());
+                                  _studentsBloc.add(const LoadStudents());
                                 },
                                 child: const Text('Reload'),
                               ),
@@ -283,7 +308,7 @@ class _StudentsPageState extends State<StudentsPage> {
                             const SizedBox(height: 16),
                             ElevatedButton(
                               onPressed: () {
-                                context.read<StudentsBloc>().add(const LoadStudents());
+                                _studentsBloc.add(const LoadStudents());
                               },
                               child: const Text('Try Again'),
                             ),

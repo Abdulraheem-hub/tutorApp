@@ -81,10 +81,23 @@ class FirebaseService {
     try {
       // Check if user is already signed in
       if (auth.currentUser == null) {
+        print('🔐 Firebase: No user signed in, signing in anonymously...');
         // Sign in anonymously for testing purposes
-        await auth.signInAnonymously();
-      } else {}
-    } catch (e) {}
+        final userCredential = await auth.signInAnonymously();
+        print('🔐 Firebase: Anonymous sign-in successful. User ID: ${userCredential.user?.uid}');
+      } else {
+        print('🔐 Firebase: User already signed in. User ID: ${auth.currentUser?.uid}');
+      }
+    } catch (e) {
+      print('❌ Firebase: Failed to initialize anonymous auth: $e');
+      await crashlytics.recordError(
+        e,
+        StackTrace.current,
+        reason: 'Failed to initialize anonymous authentication',
+      );
+      // Re-throw to ensure this error is handled upstream
+      rethrow;
+    }
   }
 
   /// Initialize Crashlytics
