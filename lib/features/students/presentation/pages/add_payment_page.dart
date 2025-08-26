@@ -12,6 +12,10 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/app_utils.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/services/firebase_service.dart';
+import '../../../payments/data/repositories/firebase_payment_repository.dart';
+import '../../../payments/domain/entities/payment_entity.dart' as payment_domain;
+import '../../../payments/domain/usecases/process_payment_usecase.dart';
+import '../../../students/domain/entities/student_entity.dart';
 
 class AddPaymentPage extends StatefulWidget {
   final Student? student;
@@ -640,53 +644,32 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
 
       try {
         final amount = double.parse(_amountController.text);
-        final firebaseService = FirebaseService.instance;
+        final paymentRepository = FirebasePaymentRepository();
 
-        // Create payment document in Firestore
-        final paymentData = {
-          'studentId': _student!.id,
-          'studentName': _student!.name,
-          'amount': amount,
-          'paymentDate': _selectedDate.toIso8601String(),
-          'method': _selectedPaymentMethod.name,
-          'description': _descriptionController.text.isNotEmpty
-              ? _descriptionController.text
-              : _selectedPaymentType.displayName,
-          'type': _selectedPaymentType.name,
-          'createdAt': DateTime.now().toIso8601String(),
-          'status': 'completed',
-        };
+        // Convert Student to StudentEntity for payment processing
+        final studentEntity = _convertToStudentEntity(_student!);
+        
+        // Convert PaymentMethod to the domain enum
+        final domainPaymentMethod = _convertPaymentMethod(_selectedPaymentMethod);
 
-        // Save to Firestore
-        final docRef = await firebaseService.firestore
-            .collection('users')
-            .doc(firebaseService.currentUserId)
-            .collection('payments')
-            .add(paymentData);
-
-        // Create payment object for navigation
-        final payment = Payment(
-          id: docRef.id,
-          studentId: _student!.id,
-          amount: amount,
+        // Process payment using comprehensive payment logic
+        final result = await paymentRepository.processAndStorePayment(
+          student: studentEntity,
+          paymentAmount: amount,
+          paymentMethod: domainPaymentMethod,
           paymentDate: _selectedDate,
-          method: _selectedPaymentMethod,
           description: _descriptionController.text.isNotEmpty
               ? _descriptionController.text
               : _selectedPaymentType.displayName,
-          type: _selectedPaymentType,
+          notes: null,
         );
 
         // Hide loading indicator
         if (mounted) Navigator.pop(context);
 
-        // Navigate to payment confirmation page
+        // Show payment success with detailed breakdown
         if (mounted) {
-          Navigator.pushNamed(
-            context,
-            '/payment-confirmation',
-            arguments: {'payment': payment, 'student': _student},
-          );
+          _showPaymentSuccessDialog(result);
         }
       } catch (e) {
         // Hide loading indicator
@@ -696,7 +679,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Failed to save payment: $e'),
+              content: Text('Failed to process payment: $e'),
               backgroundColor: Colors.red,
               behavior: SnackBarBehavior.floating,
             ),
@@ -704,5 +687,181 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         }
       }
     }
+  }
+
+  /// Convert Student to StudentEntity for payment processing
+  StudentEntity _convertToStudentEntity(Student student) {
+    return StudentEntity(
+      id: student.id,
+      name: student.name,
+      subject: student.subjects.isNotEmpty ? student.subjects.first.name : 'General',
+      monthlyFee: student.monthlyFee,
+      email: student.email,
+      phone: student.phoneNumber,
+      address: student.address,
+      createdAt: student.joinDate,
+      outstandingBalance: student.outstandingBalance,
+      currentMonthPaid: student.currentMonthPaid,
+      paymentPeriod: student.paymentPeriod,
+      lastPaymentAmount: student.lastPaymentAmount,
+    );
+  }
+
+  /// Convert PaymentMethod from student entities to payment domain
+  payment_domain.PaymentMethod _convertPaymentMethod(PaymentMethod method) {
+    switch (method) {
+      case PaymentMethod.cash:
+        return payment_domain.PaymentMethod.cash;
+      case PaymentMethod.card:
+        return payment_domain.PaymentMethod.creditCard;
+      case PaymentMethod.bankTransfer:
+        return payment_domain.PaymentMethod.bankTransfer;
+      case PaymentMethod.digitalWallet:
+        return payment_domain.PaymentMethod.other;
+    }
+  }
+
+  /// Show payment success dialog with detailed breakdown
+  void _showPaymentSuccessDialog(PaymentProcessingResult result) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(
+              Icons.check_circle,
+              color: Colors.green,
+              size: 28,
+            ),
+            const SizedBox(width: 8),
+            const Text('Payment Processed'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Payment Details:',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 12),
+            _buildDetailRow('Amount', '\$${result.payment.amount.toStringAsFixed(2)}'),
+            _buildDetailRow('Student', result.payment.studentName),
+            _buildDetailRow('Date', AppUtils.formatDate(result.payment.date)),
+            _buildDetailRow('Method', result.payment.methodDisplayName),
+            
+            if (result.payment.isPartialPayment) ...[
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.orange.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Partial Payment',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange.shade700,
+                      ),
+                    ),
+                    _buildDetailRow('Shortfall', '\$${result.payment.shortfallAmount.toStringAsFixed(2)}'),
+                  ],
+                ),
+              ),
+            ],
+            
+            if (result.payment.excessAmount > 0) ...[
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.green.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.green.withValues(alpha: 0.3)),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Overpayment',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green.shade700,
+                      ),
+                    ),
+                    _buildDetailRow('Excess', '\$${result.payment.excessAmount.toStringAsFixed(2)}'),
+                  ],
+                ),
+              ),
+            ],
+            
+            const SizedBox(height: 12),
+            _buildDetailRow(
+              'Outstanding Balance', 
+              '\$${result.updatedStudent.outstandingBalance.toStringAsFixed(2)}'
+            ),
+            _buildDetailRow(
+              'Current Month Status', 
+              result.updatedStudent.currentMonthPaid ? 'Paid' : 'Pending'
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close dialog
+              Navigator.of(context).pop(); // Go back to previous screen
+            },
+            child: const Text('Close'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close dialog
+              Navigator.pushNamed(context, '/payments'); // Navigate to payments page
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppTheme.primaryPurple,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('View Payments'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 14,
+            ),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

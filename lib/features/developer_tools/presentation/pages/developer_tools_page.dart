@@ -8,7 +8,8 @@ library;
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/services/firebase_service.dart';
+import '../../../../core/utils/database_seeder.dart';
+import '../../../../core/utils/data_cleanup_utility.dart';
 
 class DeveloperToolsPage extends StatefulWidget {
   const DeveloperToolsPage({super.key});
@@ -461,7 +462,7 @@ class _DeveloperToolsPageState extends State<DeveloperToolsPage> {
     });
 
     try {
-      await FirebaseService.instance.populateSampleData();
+      await DatabaseSeeder.populateAllSampleData();
 
       if (mounted) {
         setState(() {
@@ -507,34 +508,7 @@ class _DeveloperToolsPageState extends State<DeveloperToolsPage> {
     });
 
     try {
-      final firestore = FirebaseService.instance.firestore;
-      final userId = FirebaseService.instance.currentUserId;
-
-      // Clear students
-      final studentsSnapshot = await firestore
-          .collection('users')
-          .doc(userId)
-          .collection('students')
-          .get();
-
-      final studentsBatch = firestore.batch();
-      for (final doc in studentsSnapshot.docs) {
-        studentsBatch.delete(doc.reference);
-      }
-      await studentsBatch.commit();
-
-      // Clear payments
-      final paymentsSnapshot = await firestore
-          .collection('users')
-          .doc(userId)
-          .collection('payments')
-          .get();
-
-      final paymentsBatch = firestore.batch();
-      for (final doc in paymentsSnapshot.docs) {
-        paymentsBatch.delete(doc.reference);
-      }
-      await paymentsBatch.commit();
+      await DataCleanupUtility.clearAllDevelopmentData();
 
       if (mounted) {
         setState(() {
