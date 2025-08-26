@@ -1,9 +1,8 @@
-/**
- * @context7:feature:students
- * @context7:pattern:widget_component
- * 
- * Students statistics cards
- */
+/// @context7:feature:students
+/// @context7:pattern:widget_component
+///
+/// Students statistics cards
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -21,8 +20,6 @@ class StudentsStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       margin: const EdgeInsets.only(bottom: 24),
@@ -79,7 +76,7 @@ class _StatCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

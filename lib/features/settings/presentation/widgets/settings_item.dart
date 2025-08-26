@@ -1,9 +1,8 @@
-/**
- * @context7:feature:settings
- * @context7:pattern:widget_component
- * 
- * Individual settings item widget
- */
+/// @context7:feature:settings
+/// @context7:pattern:widget_component
+/// 
+/// Individual settings item widget
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';

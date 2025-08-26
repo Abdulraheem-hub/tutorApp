@@ -1,10 +1,9 @@
-/**
- * @context7:feature:payment_settings
- * @context7:pattern:page_widget
- * 
- * Payment method settings page for managing available payment options
- * that tutors can select when recording student fee payments
- */
+/// @context7:feature:payment_settings
+/// @context7:pattern:page_widget
+/// 
+/// Payment method settings page for managing available payment options
+/// that tutors can select when recording student fee payments
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -147,7 +146,7 @@ class _PaymentSettingsPageState extends State<PaymentSettingsPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.textLight.withOpacity(0.2)),
+        border: Border.all(color: AppTheme.textLight.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -232,7 +231,7 @@ class _PaymentSettingsPageState extends State<PaymentSettingsPage> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppTheme.textLight.withOpacity(0.3),
+                color: AppTheme.textLight.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

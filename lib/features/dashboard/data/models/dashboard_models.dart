@@ -1,10 +1,9 @@
-/**
- * @context7:feature:dashboard
- * @context7:dependencies:dashboard_entities
- * @context7:pattern:data_model
- * 
- * Data models for dashboard feature with JSON serialization
- */
+/// @context7:feature:dashboard
+/// @context7:dependencies:dashboard_entities
+/// @context7:pattern:data_model
+/// 
+/// Data models for dashboard feature with JSON serialization
+library;
 
 import '../../domain/entities/dashboard_entities.dart';
 import '../../../../core/utils/app_utils.dart';

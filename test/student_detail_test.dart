@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
-import '../lib/features/students/domain/entities/student_entities.dart';
-import '../lib/features/students/presentation/pages/student_detail_page.dart';
-import '../lib/features/students/presentation/widgets/student_card.dart';
-import '../lib/core/theme/app_theme.dart';
+import 'package:tutor_pay/features/students/domain/entities/student_entities.dart';
+import 'package:tutor_pay/features/students/presentation/pages/student_detail_page.dart';
+import 'package:tutor_pay/features/students/presentation/widgets/student_card.dart';
+import 'package:tutor_pay/core/theme/app_theme.dart';
 
 void main() {
   group('Student Detail Page Tests', () {

@@ -1,10 +1,9 @@
-/**
- * @context7:feature:utilities
- * @context7:dependencies:intl
- * @context7:pattern:helper_functions
- * 
- * Utility functions for formatting and common operations
- */
+/// @context7:feature:utilities
+/// @context7:dependencies:intl
+/// @context7:pattern:helper_functions
+///
+/// Utility functions for formatting and common operations
+library;
 
 import 'package:intl/intl.dart';
 import '../constants/app_constants.dart';
@@ -18,31 +17,35 @@ class AppUtils {
     );
     return formatter.format(amount);
   }
-  
+
   // Percentage Formatting
   static String formatPercentage(double percentage) {
     final formatter = NumberFormat.percentPattern();
     return formatter.format(percentage / 100);
   }
-  
+
   // Date Formatting
   static String formatDate(DateTime date) {
     return DateFormat(AppConstants.dateFormat).format(date);
   }
-  
+
   static String formatTime(DateTime time) {
     return DateFormat(AppConstants.timeFormat).format(time);
   }
-  
+
   static String formatDateTime(DateTime dateTime) {
     return DateFormat(AppConstants.dateTimeFormat).format(dateTime);
   }
-  
+
+  static String formatMonthYear(DateTime date) {
+    return DateFormat('MMM yyyy').format(date);
+  }
+
   // Time ago formatting
   static String timeAgo(DateTime dateTime) {
     final now = DateTime.now();
     final difference = now.difference(dateTime);
-    
+
     if (difference.inDays > 365) {
       final years = (difference.inDays / 365).floor();
       return '${years}y ago';
@@ -59,7 +62,7 @@ class AppUtils {
       return 'Just now';
     }
   }
-  
+
   // Number Formatting
   static String formatNumber(int number) {
     if (number >= 1000000) {
@@ -69,17 +72,18 @@ class AppUtils {
     }
     return number.toString();
   }
-  
+
   // Validation
   static bool isValidEmail(String email) {
-    return RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-        .hasMatch(email);
+    return RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    ).hasMatch(email);
   }
-  
+
   static bool isValidPhone(String phone) {
     return RegExp(r'^\+?[\d\s\-\(\)]{10,}$').hasMatch(phone);
   }
-  
+
   // Color helpers for status
   static String getPaymentStatusColor(String status) {
     switch (status.toLowerCase()) {
@@ -95,7 +99,7 @@ class AppUtils {
         return 'info';
     }
   }
-  
+
   // Generate dummy data (for development)
   static List<Map<String, dynamic>> generateDummyStudents() {
     return [
@@ -125,7 +129,7 @@ class AppUtils {
       },
     ];
   }
-  
+
   static Map<String, dynamic> generateDummyDashboardData() {
     return {
       'totalEarnings': 2450.0,

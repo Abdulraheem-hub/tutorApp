@@ -1,10 +1,9 @@
-/**
- * @context7:feature:app
- * @context7:dependencies:flutter_bloc,dashboard_bloc
- * @context7:pattern:main_app_widget
- * 
- * Main app widget with bottom navigation and dashboard
- */
+/// @context7:feature:app
+/// @context7:dependencies:flutter_bloc,dashboard_bloc
+/// @context7:pattern:main_app_widget
+///
+/// Main app widget with bottom navigation and dashboard
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,10 +13,15 @@ import 'features/students/presentation/pages/students_page.dart';
 import 'features/students/presentation/pages/student_detail_page.dart';
 import 'features/students/presentation/pages/add_student_page.dart';
 import 'features/students/presentation/pages/add_payment_page.dart';
+import 'features/students/presentation/pages/payments_list_page.dart';
 import 'features/students/presentation/pages/payment_confirmation_page.dart';
+import 'features/payments/presentation/pages/payment_card_demo_page.dart';
+import 'features/students/presentation/bloc/students_bloc.dart';
 import 'features/students/domain/entities/student_entities.dart';
+import 'features/developer_tools/presentation/pages/developer_tools_page.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
+import 'core/di/dependency_injection.dart';
 
 class TutorPayApp extends StatelessWidget {
   const TutorPayApp({super.key});
@@ -35,12 +39,21 @@ class TutorPayApp extends StatelessWidget {
           create: (context) => DashboardBloc(),
           child: const MainScreen(),
         ),
-        AppRoutes.students: (context) => const StudentsPage(),
+        AppRoutes.students: (context) => BlocProvider(
+          create: (context) => serviceLocator<StudentsBloc>(),
+          child: const StudentsPage(),
+        ),
         AppRoutes.studentDetail: (context) => const StudentDetailPage(),
-        AppRoutes.addStudent: (context) => const AddStudentPage(),
+        AppRoutes.addStudent: (context) => BlocProvider(
+          create: (context) => serviceLocator<StudentsBloc>(),
+          child: const AddStudentPage(),
+        ),
         AppRoutes.addPayment: (context) => const AddPaymentPage(),
+        AppRoutes.payments: (context) => const PaymentsListPage(),
         AppRoutes.paymentConfirmation: (context) =>
             const PaymentConfirmationPage(),
+        AppRoutes.paymentCardDemo: (context) => const PaymentCardDemoPage(),
+        AppRoutes.developerTools: (context) => const DeveloperToolsPage(),
       },
       onGenerateRoute: (settings) {
         if (settings.name == AppRoutes.studentDetail) {
@@ -83,8 +96,11 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = [
     const DashboardPage(),
-    const PaymentsPage(),
-    const StudentsPage(),
+    const PaymentsListPage(),
+    BlocProvider(
+      create: (context) => serviceLocator<StudentsBloc>(),
+      child: const StudentsPage(),
+    ),
   ];
 
   @override
@@ -115,40 +131,6 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Students',
           ),
         ],
-      ),
-    );
-  }
-}
-
-// Placeholder pages for navigation
-class PaymentsPage extends StatelessWidget {
-  const PaymentsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Payments')),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.payment, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
-            Text(
-              'Payments Page',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey,
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              'Coming Soon!',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-          ],
-        ),
       ),
     );
   }

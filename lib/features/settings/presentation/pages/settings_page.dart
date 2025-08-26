@@ -1,9 +1,8 @@
-/**
- * @context7:feature:settings
- * @context7:pattern:page_widget
- * 
- * Settings page with user profile, account settings, support, and app info
- */
+/// @context7:feature:settings
+/// @context7:pattern:page_widget
+/// 
+/// Settings page with user profile, account settings, support, and app info
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -57,7 +56,7 @@ class SettingsPage extends StatelessWidget {
                 SettingsItem(
                   icon: Icons.credit_card,
                   iconColor: AppTheme.successColor,
-                  iconBackgroundColor: AppTheme.successColor.withOpacity(0.1),
+                  iconBackgroundColor: AppTheme.successColor.withValues(alpha: 0.1),
                   title: 'Payment Methods',
                   subtitle: 'Manage payment method labels',
                   onTap: () => Navigator.of(context).push(
@@ -69,7 +68,7 @@ class SettingsPage extends StatelessWidget {
                 SettingsItem(
                   icon: Icons.settings,
                   iconColor: AppTheme.primaryPurple,
-                  iconBackgroundColor: AppTheme.primaryPurple.withOpacity(0.1),
+                  iconBackgroundColor: AppTheme.primaryPurple.withValues(alpha: 0.1),
                   title: 'App Configuration',
                   subtitle: 'Manage grades and subjects',
                   onTap: () => Navigator.of(context).push(
@@ -81,7 +80,7 @@ class SettingsPage extends StatelessWidget {
                 SettingsItem(
                   icon: Icons.receipt_long,
                   iconColor: const Color(0xFF8B5CF6),
-                  iconBackgroundColor: const Color(0xFF8B5CF6).withOpacity(0.1),
+                  iconBackgroundColor: const Color(0xFF8B5CF6).withValues(alpha: 0.1),
                   title: 'Receipt Generation',
                   subtitle: 'Customize receipt templates',
                   onTap: () =>
@@ -99,7 +98,7 @@ class SettingsPage extends StatelessWidget {
                 SettingsItem(
                   icon: Icons.support_agent,
                   iconColor: AppTheme.warningColor,
-                  iconBackgroundColor: AppTheme.warningColor.withOpacity(0.1),
+                  iconBackgroundColor: AppTheme.warningColor.withValues(alpha: 0.1),
                   title: 'Contact Support',
                   subtitle: 'Get help from our team',
                   onTap: () =>
@@ -117,7 +116,7 @@ class SettingsPage extends StatelessWidget {
                 SettingsItem(
                   icon: Icons.info_outline,
                   iconColor: AppTheme.textDark,
-                  iconBackgroundColor: AppTheme.textDark.withOpacity(0.1),
+                  iconBackgroundColor: AppTheme.textDark.withValues(alpha: 0.1),
                   title: 'About ${AppConstants.appName}',
                   subtitle: 'Version ${AppConstants.appVersion}',
                   onTap: () => _showComingSoonDialog(
@@ -128,7 +127,7 @@ class SettingsPage extends StatelessWidget {
                 SettingsItem(
                   icon: Icons.logout,
                   iconColor: AppTheme.errorColor,
-                  iconBackgroundColor: AppTheme.errorColor.withOpacity(0.1),
+                  iconBackgroundColor: AppTheme.errorColor.withValues(alpha: 0.1),
                   title: 'Sign Out',
                   subtitle: 'Sign out of your account',
                   onTap: () => _showSignOutDialog(context),

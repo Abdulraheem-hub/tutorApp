@@ -1,10 +1,9 @@
-/**
- * @context7:feature:students
- * @context7:dependencies:flutter,student_entities,payment
- * @context7:pattern:page_widget
- * 
- * Add payment page for recording student payments
- */
+/// @context7:feature:students
+/// @context7:dependencies:flutter,student_entities,payment
+/// @context7:pattern:page_widget
+///
+/// Add payment page for recording student payments
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +11,7 @@ import '../../domain/entities/student_entities.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/utils/app_utils.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/services/firebase_service.dart';
 
 class AddPaymentPage extends StatefulWidget {
   final Student? student;
@@ -30,7 +30,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
   Student? _student;
   DateTime _selectedDate = DateTime.now();
   PaymentMethod _selectedPaymentMethod = PaymentMethod.cash;
-  PaymentType _selectedPaymentType = PaymentType.monthlyFee;
+  final PaymentType _selectedPaymentType = PaymentType.monthlyFee;
 
   @override
   void initState() {
@@ -127,7 +127,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: AppTheme.primaryPurple.withOpacity(0.3),
+            color: AppTheme.primaryPurple.withValues(alpha: 0.3),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -190,9 +190,11 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                       vertical: 6,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.2),
+                      color: Colors.white.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.white.withOpacity(0.3)),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.3),
+                      ),
                     ),
                     child: Text(
                       subject.name,
@@ -213,7 +215,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
+              color: Colors.white.withValues(alpha: 0.15),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(
@@ -256,10 +258,10 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
   Widget _buildProfileAvatar() {
     // Generate consistent color for avatar
     final colors = [
-      Colors.white.withOpacity(0.2),
-      Colors.blue.withOpacity(0.2),
-      Colors.green.withOpacity(0.2),
-      Colors.orange.withOpacity(0.2),
+      Colors.white.withValues(alpha: 0.2),
+      Colors.blue.withValues(alpha: 0.2),
+      Colors.green.withValues(alpha: 0.2),
+      Colors.orange.withValues(alpha: 0.2),
     ];
     final colorIndex = _student!.name.hashCode % colors.length;
     final avatarColor = colors[colorIndex.abs()];
@@ -276,7 +278,10 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
       decoration: BoxDecoration(
         color: avatarColor,
         borderRadius: BorderRadius.circular(25),
-        border: Border.all(color: Colors.white.withOpacity(0.3), width: 2),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.3),
+          width: 2,
+        ),
       ),
       child: _student!.profileImage != null
           ? ClipRRect(
@@ -319,7 +324,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -335,7 +340,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryPurple.withOpacity(0.1),
+                    color: AppTheme.primaryPurple.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(
@@ -522,7 +527,9 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.1) : Colors.grey.shade50,
+          color: isSelected
+              ? color.withValues(alpha: 0.1)
+              : Colors.grey.shade50,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected ? color : Colors.grey.shade300,
@@ -559,7 +566,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -622,29 +629,80 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
     }
   }
 
-  void _recordPayment() {
+  void _recordPayment() async {
     if (_formKey.currentState?.validate() ?? false) {
-      final amount = double.parse(_amountController.text);
-
-      // Create payment object (in real app, this would be saved via BLoC/repository)
-      final payment = Payment(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
-        studentId: _student!.id,
-        amount: amount,
-        paymentDate: _selectedDate,
-        method: _selectedPaymentMethod,
-        description: _descriptionController.text.isNotEmpty
-            ? _descriptionController.text
-            : _selectedPaymentType.displayName,
-        type: _selectedPaymentType,
+      // Show loading indicator
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(child: CircularProgressIndicator()),
       );
 
-      // Navigate to payment confirmation page
-      Navigator.pushNamed(
-        context,
-        '/payment-confirmation',
-        arguments: {'payment': payment, 'student': _student},
-      );
+      try {
+        final amount = double.parse(_amountController.text);
+        final firebaseService = FirebaseService.instance;
+
+        // Create payment document in Firestore
+        final paymentData = {
+          'studentId': _student!.id,
+          'studentName': _student!.name,
+          'amount': amount,
+          'paymentDate': _selectedDate.toIso8601String(),
+          'method': _selectedPaymentMethod.name,
+          'description': _descriptionController.text.isNotEmpty
+              ? _descriptionController.text
+              : _selectedPaymentType.displayName,
+          'type': _selectedPaymentType.name,
+          'createdAt': DateTime.now().toIso8601String(),
+          'status': 'completed',
+        };
+
+        // Save to Firestore
+        final docRef = await firebaseService.firestore
+            .collection('users')
+            .doc(firebaseService.currentUserId)
+            .collection('payments')
+            .add(paymentData);
+
+        // Create payment object for navigation
+        final payment = Payment(
+          id: docRef.id,
+          studentId: _student!.id,
+          amount: amount,
+          paymentDate: _selectedDate,
+          method: _selectedPaymentMethod,
+          description: _descriptionController.text.isNotEmpty
+              ? _descriptionController.text
+              : _selectedPaymentType.displayName,
+          type: _selectedPaymentType,
+        );
+
+        // Hide loading indicator
+        if (mounted) Navigator.pop(context);
+
+        // Navigate to payment confirmation page
+        if (mounted) {
+          Navigator.pushNamed(
+            context,
+            '/payment-confirmation',
+            arguments: {'payment': payment, 'student': _student},
+          );
+        }
+      } catch (e) {
+        // Hide loading indicator
+        if (mounted) Navigator.pop(context);
+
+        // Show error message
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to save payment: $e'),
+              backgroundColor: Colors.red,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+      }
     }
   }
 }

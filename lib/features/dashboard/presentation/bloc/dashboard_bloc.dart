@@ -1,10 +1,9 @@
-/**
- * @context7:feature:dashboard
- * @context7:dependencies:flutter_bloc,dashboard_models
- * @context7:pattern:bloc_cubit
- * 
- * Dashboard BLoC implementation
- */
+/// @context7:feature:dashboard
+/// @context7:dependencies:flutter_bloc,dashboard_models
+/// @context7:pattern:bloc_cubit
+/// 
+/// Dashboard BLoC implementation
+library;
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/models/dashboard_models.dart';

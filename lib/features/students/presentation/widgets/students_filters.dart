@@ -1,9 +1,8 @@
-/**
- * @context7:feature:students
- * @context7:pattern:widget_component
- * 
- * Students filter tabs
- */
+/// @context7:feature:students
+/// @context7:pattern:widget_component
+/// 
+/// Students filter tabs
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -50,7 +49,7 @@ class StudentsFilters extends StatelessWidget {
                   border: Border.all(
                     color: isSelected 
                         ? AppTheme.primaryPurple 
-                        : AppTheme.textLight.withOpacity(0.3),
+                        : AppTheme.textLight.withValues(alpha: 0.3),
                     width: 1,
                   ),
                 ),

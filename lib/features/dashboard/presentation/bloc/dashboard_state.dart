@@ -1,10 +1,9 @@
-/**
- * @context7:feature:dashboard
- * @context7:dependencies:flutter_bloc,equatable,dashboard_entities
- * @context7:pattern:bloc_state
- * 
- * Dashboard BLoC states
- */
+/// @context7:feature:dashboard
+/// @context7:dependencies:flutter_bloc,equatable,dashboard_entities
+/// @context7:pattern:bloc_state
+/// 
+/// Dashboard BLoC states
+library;
 
 import 'package:equatable/equatable.dart';
 import '../../domain/entities/dashboard_entities.dart';

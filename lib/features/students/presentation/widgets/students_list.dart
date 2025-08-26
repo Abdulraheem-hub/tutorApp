@@ -1,9 +1,8 @@
-/**
- * @context7:feature:students
- * @context7:pattern:widget_component
- * 
- * Students list with individual student cards
- */
+/// @context7:feature:students
+/// @context7:pattern:widget_component
+/// 
+/// Students list with individual student cards
+library;
 
 import 'package:flutter/material.dart';
 import '../../domain/entities/student_entities.dart';

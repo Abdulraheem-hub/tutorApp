@@ -1,9 +1,8 @@
-/**
- * @context7:feature:students
- * @context7:pattern:widget_component
- * 
- * Students search bar
- */
+/// @context7:feature:students
+/// @context7:pattern:widget_component
+///
+/// Students search bar
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -11,15 +10,10 @@ import '../../../../core/theme/app_theme.dart';
 class StudentsSearch extends StatelessWidget {
   final ValueChanged<String> onSearchChanged;
 
-  const StudentsSearch({
-    super.key,
-    required this.onSearchChanged,
-  });
+  const StudentsSearch({super.key, required this.onSearchChanged});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       margin: const EdgeInsets.only(bottom: 16),
@@ -27,15 +21,8 @@ class StudentsSearch extends StatelessWidget {
         onChanged: onSearchChanged,
         decoration: InputDecoration(
           hintText: 'Search students...',
-          hintStyle: TextStyle(
-            color: AppTheme.textLight,
-            fontSize: 16,
-          ),
-          prefixIcon: Icon(
-            Icons.search,
-            color: AppTheme.textLight,
-            size: 20,
-          ),
+          hintStyle: TextStyle(color: AppTheme.textLight, fontSize: 16),
+          prefixIcon: Icon(Icons.search, color: AppTheme.textLight, size: 20),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: BorderSide.none,
@@ -47,10 +34,7 @@ class StudentsSearch extends StatelessWidget {
             vertical: 12,
           ),
         ),
-        style: TextStyle(
-          color: AppTheme.textDark,
-          fontSize: 16,
-        ),
+        style: TextStyle(color: AppTheme.textDark, fontSize: 16),
       ),
     );
   }

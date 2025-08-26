@@ -1,10 +1,9 @@
-/**
- * @context7:feature:students
- * @context7:dependencies:equatable
- * @context7:pattern:domain_entity
- * 
- * Domain entities for students feature
- */
+/// @context7:feature:students
+/// @context7:dependencies:equatable
+/// @context7:pattern:domain_entity
+///
+/// Domain entities for students feature
+library;
 
 import 'package:equatable/equatable.dart';
 
@@ -25,6 +24,12 @@ class Student extends Equatable {
   final String? phoneNumber;
   final String? email;
 
+  // Payment flow fields
+  final double outstandingBalance;
+  final bool currentMonthPaid;
+  final DateTime? paymentPeriod;
+  final double? lastPaymentAmount;
+
   const Student({
     required this.id,
     required this.name,
@@ -41,26 +46,61 @@ class Student extends Equatable {
     this.address,
     this.phoneNumber,
     this.email,
+    this.outstandingBalance = 0.0,
+    this.currentMonthPaid = false,
+    this.paymentPeriod,
+    this.lastPaymentAmount,
   });
+
+  /// Calculate total amount due (outstanding + current month fee if not paid)
+  double get totalAmountDue {
+    double total = outstandingBalance;
+    if (!currentMonthPaid) {
+      total += monthlyFee;
+    }
+    return total;
+  }
+
+  /// Check if student is current on payments
+  bool get isCurrentOnPayments {
+    return currentMonthPaid && outstandingBalance == 0.0;
+  }
+
+  /// Get payment status text
+  String get paymentStatusText {
+    if (isCurrentOnPayments) {
+      return 'Current';
+    } else if (currentMonthPaid && outstandingBalance > 0) {
+      return 'Due from previous months';
+    } else if (!currentMonthPaid && outstandingBalance == 0) {
+      return 'Current month pending';
+    } else {
+      return 'Payment overdue';
+    }
+  }
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        profileImage,
-        grade,
-        subjects,
-        monthlyFee,
-        paymentStatus,
-        nextPaymentDate,
-        joinDate,
-        isActive,
-        admissionNumber,
-        admissionDate,
-        address,
-        phoneNumber,
-        email,
-      ];
+    id,
+    name,
+    profileImage,
+    grade,
+    subjects,
+    monthlyFee,
+    paymentStatus,
+    nextPaymentDate,
+    joinDate,
+    isActive,
+    admissionNumber,
+    admissionDate,
+    address,
+    phoneNumber,
+    email,
+    outstandingBalance,
+    currentMonthPaid,
+    paymentPeriod,
+    lastPaymentAmount,
+  ];
 }
 
 class Subject extends Equatable {
@@ -68,11 +108,7 @@ class Subject extends Equatable {
   final String name;
   final String? shortName;
 
-  const Subject({
-    required this.id,
-    required this.name,
-    this.shortName,
-  });
+  const Subject({required this.id, required this.name, this.shortName});
 
   @override
   List<Object?> get props => [id, name, shortName];
@@ -93,12 +129,7 @@ enum Grade {
   grade12,
 }
 
-enum PaymentStatus {
-  paid,
-  pending,
-  overdue,
-  newStudent,
-}
+enum PaymentStatus { paid, pending, overdue, newStudent }
 
 extension GradeExtension on Grade {
   String get displayName {
@@ -183,16 +214,10 @@ class StudentsData extends Equatable {
   final List<Student> students;
   final Map<PaymentStatus, int> statusCounts;
 
-  const StudentsData({
-    required this.students,
-    required this.statusCounts,
-  });
+  const StudentsData({required this.students, required this.statusCounts});
 
   @override
-  List<Object?> get props => [
-        students,
-        statusCounts,
-      ];
+  List<Object?> get props => [students, statusCounts];
 }
 
 class Payment extends Equatable {
@@ -216,30 +241,19 @@ class Payment extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        studentId,
-        amount,
-        paymentDate,
-        method,
-        description,
-        type,
-      ];
+    id,
+    studentId,
+    amount,
+    paymentDate,
+    method,
+    description,
+    type,
+  ];
 }
 
-enum PaymentMethod {
-  cash,
-  card,
-  bankTransfer,
-  digitalWallet,
-}
+enum PaymentMethod { cash, card, bankTransfer, digitalWallet }
 
-enum PaymentType {
-  monthlyFee,
-  registrationFee,
-  examFee,
-  extraClass,
-  other,
-}
+enum PaymentType { monthlyFee, registrationFee, examFee, extraClass, other }
 
 extension PaymentMethodExtension on PaymentMethod {
   String get displayName {

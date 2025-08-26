@@ -1,9 +1,8 @@
-/**
- * @context7:feature:payment_settings
- * @context7:pattern:widget_test
- * 
- * Tests for payment options page functionality
- */
+/// @context7:feature:payment_settings
+/// @context7:pattern:widget_test
+/// 
+/// Tests for payment options page functionality
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

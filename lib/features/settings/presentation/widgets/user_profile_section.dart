@@ -1,9 +1,8 @@
-/**
- * @context7:feature:settings
- * @context7:pattern:widget_component
- * 
- * User profile section for settings page
- */
+/// @context7:feature:settings
+/// @context7:pattern:widget_component
+/// 
+/// User profile section for settings page
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -22,7 +21,7 @@ class UserProfileSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -40,8 +39,8 @@ class UserProfileSection extends StatelessWidget {
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
                     colors: [
-                      AppTheme.primaryPurple.withOpacity(0.8),
-                      AppTheme.primaryPurple.withOpacity(0.6),
+                      AppTheme.primaryPurple.withValues(alpha: 0.8),
+                      AppTheme.primaryPurple.withValues(alpha: 0.6),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
@@ -50,7 +49,7 @@ class UserProfileSection extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
                   child: Container(
-                    color: AppTheme.primaryPurple.withOpacity(0.1),
+                    color: AppTheme.primaryPurple.withValues(alpha: 0.1),
                     child: Icon(
                       Icons.person,
                       size: 30,

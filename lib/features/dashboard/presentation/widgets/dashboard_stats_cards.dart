@@ -1,10 +1,9 @@
-/**
- * @context7:feature:dashboard
- * @context7:dependencies:dashboard_entities,app_utils
- * @context7:pattern:widget_component
- * 
- * Dashboard stats cards showing earnings, students, pending payments, and monthly goal
- */
+/// @context7:feature:dashboard
+/// @context7:dependencies:dashboard_entities,app_utils
+/// @context7:pattern:widget_component
+///
+/// Dashboard stats cards showing earnings, students, pending payments, and monthly goal
+library;
 
 import 'package:flutter/material.dart';
 import '../../domain/entities/dashboard_entities.dart';
@@ -36,7 +35,9 @@ class DashboardStatsCards extends StatelessWidget {
                 change: 0.0,
                 changeLabel: '',
                 icon: Icons.trending_up,
-                backgroundColor: const Color(0xFFEEF2FF), // Light purple background
+                backgroundColor: const Color(
+                  0xFFEEF2FF,
+                ), // Light purple background
                 iconColor: const Color(0xFF6366F1),
                 isRefreshing: isRefreshing,
               ),
@@ -50,7 +51,9 @@ class DashboardStatsCards extends StatelessWidget {
                 change: dashboardData.earningsChange,
                 changeLabel: '+${dashboardData.earningsChange.toInt()}%',
                 icon: Icons.account_balance_wallet_outlined,
-                backgroundColor: const Color(0xFFECFDF5), // Light green background
+                backgroundColor: const Color(
+                  0xFFECFDF5,
+                ), // Light green background
                 iconColor: AppTheme.successColor,
                 isRefreshing: isRefreshing,
               ),
@@ -88,7 +91,7 @@ class _StatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return AnimatedOpacity(
       opacity: isRefreshing ? 0.6 : 1.0,
       duration: const Duration(milliseconds: 300),
@@ -111,17 +114,16 @@ class _StatsCard extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Icon(
-                    icon,
-                    color: iconColor,
-                    size: 20,
-                  ),
+                  child: Icon(icon, color: iconColor, size: 20),
                 ),
                 if (change > 0 && changeLabel.isNotEmpty)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
-                      color: AppTheme.successColor.withOpacity(0.1),
+                      color: AppTheme.successColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -145,9 +147,9 @@ class _StatsCard extends StatelessWidget {
                   ),
               ],
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Value
             Text(
               value,
@@ -157,9 +159,9 @@ class _StatsCard extends StatelessWidget {
                 fontSize: 28,
               ),
             ),
-            
+
             const SizedBox(height: 4),
-            
+
             // Title and subtitle
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -208,7 +210,7 @@ class _GoalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return AnimatedOpacity(
       opacity: isRefreshing ? 0.6 : 1.0,
       duration: const Duration(milliseconds: 300),
@@ -246,9 +248,9 @@ class _GoalCard extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Target amount
             Text(
               AppUtils.formatCurrency(target),
@@ -258,9 +260,9 @@ class _GoalCard extends StatelessWidget {
                 fontSize: 28,
               ),
             ),
-            
+
             const SizedBox(height: 4),
-            
+
             // Title
             Text(
               title,
@@ -269,9 +271,9 @@ class _GoalCard extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            
+
             const SizedBox(height: 12),
-            
+
             // Progress bar
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -302,7 +304,7 @@ class _GoalCard extends StatelessWidget {
                 const SizedBox(height: 8),
                 LinearProgressIndicator(
                   value: progress,
-                  backgroundColor: Colors.white.withOpacity(0.3),
+                  backgroundColor: Colors.white.withValues(alpha: 0.3),
                   valueColor: AlwaysStoppedAnimation<Color>(
                     AppTheme.purpleGoal,
                   ),

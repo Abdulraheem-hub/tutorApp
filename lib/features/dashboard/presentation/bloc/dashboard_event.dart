@@ -1,10 +1,9 @@
-/**
- * @context7:feature:dashboard
- * @context7:dependencies:flutter_bloc,equatable
- * @context7:pattern:bloc_event
- * 
- * Dashboard BLoC events
- */
+/// @context7:feature:dashboard
+/// @context7:dependencies:flutter_bloc,equatable
+/// @context7:pattern:bloc_event
+/// 
+/// Dashboard BLoC events
+library;
 
 import 'package:equatable/equatable.dart';
 

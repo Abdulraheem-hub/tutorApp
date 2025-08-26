@@ -1,0 +1,29 @@
+{
+  "flutter": {
+    "platforms": {
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "tutor-247",
+          "configurations": {
+            "android": "1:416100721092:android:be517f3fcda9ed1e10c491",
+            "ios": "1:416100721092:ios:660a0529fb96e2bd10c491",
+            "web": "1:416100721092:web:8c264d0f7f1cc42c10c491"
+          }
+        }
+      },
+      "android": {
+        "default": {
+          "projectId": "tutor-247",
+          "appId": "1:416100721092:android:be517f3fcda9ed1e10c491",
+          "fileOutput": "android/app/google-services.json"
+        }
+      }
+    }
+  },
+  "firestore": {
+    "database": "(default)",
+    "location": "asia-southeast1",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

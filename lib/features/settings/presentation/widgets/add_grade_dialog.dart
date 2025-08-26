@@ -1,10 +1,9 @@
-/**
- * @context7:feature:app_configuration
- * @context7:pattern:dialog_widget
- * @context7:dependencies:flutter/material.dart
- * 
- * Dialog for adding or editing grades in the app configuration
- */
+/// @context7:feature:app_configuration
+/// @context7:pattern:dialog_widget
+/// @context7:dependencies:flutter/material.dart
+/// 
+/// Dialog for adding or editing grades in the app configuration
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -103,7 +102,7 @@ class _AddGradeDialogState extends State<AddGradeDialog> {
               // Active Status
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: SwitchListTile(
@@ -191,7 +190,7 @@ class _AddGradeDialogState extends State<AddGradeDialog> {
             hintText: hintText,
             hintStyle: TextStyle(
               fontSize: 16,
-              color: AppTheme.textLight.withOpacity(0.7),
+              color: AppTheme.textLight.withValues(alpha: 0.7),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
@@ -199,11 +198,11 @@ class _AddGradeDialogState extends State<AddGradeDialog> {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.3)),
+              borderSide: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),

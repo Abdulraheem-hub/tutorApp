@@ -1,9 +1,8 @@
-/**
- * @context7:feature:dashboard
- * @context7:pattern:widget_component
- * 
- * Dashboard header with greeting and app branding
- */
+/// @context7:feature:dashboard
+/// @context7:pattern:widget_component
+/// 
+/// Dashboard header with greeting and app branding
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -78,7 +77,7 @@ class DashboardHeader extends StatelessWidget {
                 ),
                 tooltip: 'Settings',
                 style: IconButton.styleFrom(
-                  backgroundColor: theme.colorScheme.surfaceVariant.withOpacity(0.5),
+                  backgroundColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
                 ),
               ),
             ],

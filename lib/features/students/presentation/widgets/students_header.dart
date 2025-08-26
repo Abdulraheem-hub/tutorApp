@@ -1,9 +1,8 @@
-/**
- * @context7:feature:students
- * @context7:pattern:widget_component
- * 
- * Students page header with title and add button
- */
+/// @context7:feature:students
+/// @context7:pattern:widget_component
+/// 
+/// Students page header with title and add button
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';

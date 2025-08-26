@@ -1,12 +1,11 @@
-/**
- * @context7:feature:app_configuration
- * @context7:pattern:page_widget
- * @context7:dependencies:flutter/material.dart
- * 
- * App configuration page for managing grades and subjects that are used
- * when adding students. This centralized configuration allows tutors to
- * customize available options based on their teaching context.
- */
+/// @context7:feature:app_configuration
+/// @context7:pattern:page_widget
+/// @context7:dependencies:flutter/material.dart
+/// 
+/// App configuration page for managing grades and subjects that are used
+/// when adding students. This centralized configuration allows tutors to
+/// customize available options based on their teaching context.
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -233,7 +232,7 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: AppTheme.textLight.withOpacity(0.2)),
+        side: BorderSide(color: AppTheme.textLight.withValues(alpha: 0.2)),
       ),
       child: InkWell(
         onTap: onTap,
@@ -249,7 +248,7 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
                     width: 48,
                     height: 48,
                     decoration: BoxDecoration(
-                      color: iconColor.withOpacity(0.1),
+                      color: iconColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Icon(icon, size: 24, color: iconColor),
@@ -282,7 +281,7 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
                     onPressed: onAdd,
                     icon: const Icon(Icons.add, color: AppTheme.primaryPurple),
                     style: IconButton.styleFrom(
-                      backgroundColor: AppTheme.primaryPurple.withOpacity(0.1),
+                      backgroundColor: AppTheme.primaryPurple.withValues(alpha: 0.1),
                       padding: const EdgeInsets.all(8),
                     ),
                   ),
@@ -317,7 +316,7 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
                   Icon(
                     Icons.arrow_forward_ios,
                     size: 14,
-                    color: AppTheme.textLight.withOpacity(0.7),
+                    color: AppTheme.textLight.withValues(alpha: 0.7),
                   ),
                 ],
               ),
@@ -336,7 +335,7 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(
@@ -386,7 +385,7 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppTheme.textLight.withOpacity(0.3),
+                  color: AppTheme.textLight.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -399,7 +398,7 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryPurple.withOpacity(0.1),
+                        color: AppTheme.primaryPurple.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Icon(
@@ -483,7 +482,7 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppTheme.textLight.withOpacity(0.3),
+                  color: AppTheme.textLight.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -496,7 +495,7 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: AppTheme.successColor.withOpacity(0.1),
+                        color: AppTheme.successColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Icon(
@@ -564,12 +563,12 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
       decoration: BoxDecoration(
         color: grade.isActive
             ? Colors.white
-            : AppTheme.textLight.withOpacity(0.1),
+            : AppTheme.textLight.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: grade.isActive
-              ? AppTheme.primaryPurple.withOpacity(0.2)
-              : AppTheme.textLight.withOpacity(0.2),
+              ? AppTheme.primaryPurple.withValues(alpha: 0.2)
+              : AppTheme.textLight.withValues(alpha: 0.2),
         ),
       ),
       child: ListTile(
@@ -579,8 +578,8 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
           height: 40,
           decoration: BoxDecoration(
             color: grade.isActive
-                ? AppTheme.primaryPurple.withOpacity(0.1)
-                : AppTheme.textLight.withOpacity(0.1),
+                ? AppTheme.primaryPurple.withValues(alpha: 0.1)
+                : AppTheme.textLight.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Center(
@@ -663,7 +662,7 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppTheme.successColor.withOpacity(0.2)),
+        border: Border.all(color: AppTheme.successColor.withValues(alpha: 0.2)),
       ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -671,7 +670,7 @@ class _AppConfigurationPageState extends State<AppConfigurationPage> {
           width: 40,
           height: 40,
           decoration: BoxDecoration(
-            color: AppTheme.successColor.withOpacity(0.1),
+            color: AppTheme.successColor.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Center(

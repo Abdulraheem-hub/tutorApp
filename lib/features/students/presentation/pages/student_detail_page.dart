@@ -1,10 +1,9 @@
-/**
- * @context7:feature:students
- * @context7:dependencies:flutter,student_entities
- * @context7:pattern:page_widget
- * 
- * Student detail page with comprehensive student information
- */
+/// @context7:feature:students
+/// @context7:dependencies:flutter,student_entities
+/// @context7:pattern:page_widget
+///
+/// Student detail page with comprehensive student information
+library;
 
 import 'package:flutter/material.dart';
 import '../../domain/entities/student_entities.dart';
@@ -186,7 +185,7 @@ class _StudentDetailPageState extends State<StudentDetailPage>
       width: 80,
       height: 80,
       decoration: BoxDecoration(
-        color: avatarColor.withOpacity(0.1),
+        color: avatarColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(40),
       ),
       child: _student!.profileImage != null
@@ -378,7 +377,7 @@ class _StudentDetailPageState extends State<StudentDetailPage>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -449,7 +448,7 @@ class _StudentDetailPageState extends State<StudentDetailPage>
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -557,10 +556,11 @@ class _StudentDetailPageState extends State<StudentDetailPage>
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('View payments feature coming soon!'),
-                      ),
+                    Navigator.pushNamed(
+                      context,
+                      '/payments',
+                      arguments:
+                          _student!.id, // Pass student ID to filter payments
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -602,7 +602,7 @@ class _StudentDetailPageState extends State<StudentDetailPage>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -658,7 +658,7 @@ class _StudentDetailPageState extends State<StudentDetailPage>
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: AppTheme.greenPositive.withOpacity(0.1),
+              color: AppTheme.greenPositive.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Icon(

@@ -1,9 +1,8 @@
-/**
- * @context7:feature:students
- * @context7:pattern:widget_component
- * 
- * Basic information form for add student step 1
- */
+/// @context7:feature:students
+/// @context7:pattern:widget_component
+/// 
+/// Basic information form for add student step 1
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';

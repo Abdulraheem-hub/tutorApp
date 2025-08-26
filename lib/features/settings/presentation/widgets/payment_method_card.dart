@@ -1,9 +1,8 @@
-/**
- * @context7:feature:payment_settings
- * @context7:pattern:widget_component
- * 
- * Payment method card widget for displaying individual payment methods
- */
+/// @context7:feature:payment_settings
+/// @context7:pattern:widget_component
+/// 
+/// Payment method card widget for displaying individual payment methods
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -34,8 +33,8 @@ class PaymentMethodCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(
           color: paymentMethod.isDefault
-              ? AppTheme.primaryPurple.withOpacity(0.3)
-              : AppTheme.textLight.withOpacity(0.2),
+              ? AppTheme.primaryPurple.withValues(alpha: 0.3)
+              : AppTheme.textLight.withValues(alpha: 0.2),
           width: paymentMethod.isDefault ? 2 : 1,
         ),
       ),
@@ -86,7 +85,7 @@ class PaymentMethodCard extends StatelessWidget {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: AppTheme.primaryPurple.withOpacity(0.1),
+                              color: AppTheme.primaryPurple.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Text(
@@ -156,15 +155,15 @@ class PaymentMethodCard extends StatelessWidget {
   Color _getIconBackgroundColor() {
     switch (paymentMethod.type) {
       case PaymentMethodType.upi:
-        return AppTheme.successColor.withOpacity(0.1);
+        return AppTheme.successColor.withValues(alpha: 0.1);
       case PaymentMethodType.cash:
-        return AppTheme.warningColor.withOpacity(0.1);
+        return AppTheme.warningColor.withValues(alpha: 0.1);
       case PaymentMethodType.creditCard:
-        return AppTheme.primaryPurple.withOpacity(0.1);
+        return AppTheme.primaryPurple.withValues(alpha: 0.1);
       case PaymentMethodType.debitCard:
-        return AppTheme.warningColor.withOpacity(0.1);
+        return AppTheme.warningColor.withValues(alpha: 0.1);
       case PaymentMethodType.bankTransfer:
-        return AppTheme.infoColor.withOpacity(0.1);
+        return AppTheme.infoColor.withValues(alpha: 0.1);
     }
   }
 }

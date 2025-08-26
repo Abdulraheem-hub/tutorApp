@@ -1,15 +1,13 @@
-/**
- * @context7:feature:dashboard
- * @context7:dependencies:dashboard_entities,app_utils
- * @context7:pattern:widget_component
- * 
- * Recent activity section showing student payment activities
- */
+/// @context7:feature:dashboard
+/// @context7:dependencies:dashboard_entities,app_utils
+/// @context7:pattern:widget_component
+///
+/// Recent activity section showing student payment activities
+library;
 
 import 'package:flutter/material.dart';
 import '../../domain/entities/dashboard_entities.dart';
 import '../../../../core/utils/app_utils.dart';
-import '../../../../core/theme/app_theme.dart';
 
 class DashboardRecentActivity extends StatelessWidget {
   final List<StudentActivity> activities;
@@ -46,9 +44,9 @@ class DashboardRecentActivity extends StatelessWidget {
             ),
           ],
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         // Activity list
         AnimatedOpacity(
           opacity: isRefreshing ? 0.6 : 1.0,
@@ -63,11 +61,8 @@ class DashboardRecentActivity extends StatelessWidget {
                 final index = entry.key;
                 final activity = entry.value;
                 final isLast = index == activities.length - 1;
-                
-                return _ActivityItem(
-                  activity: activity,
-                  showDivider: !isLast,
-                );
+
+                return _ActivityItem(activity: activity, showDivider: !isLast);
               }).toList(),
             ),
           ),
@@ -97,15 +92,12 @@ class _ActivityItem extends StatelessWidget {
   final StudentActivity activity;
   final bool showDivider;
 
-  const _ActivityItem({
-    required this.activity,
-    this.showDivider = true,
-  });
+  const _ActivityItem({required this.activity, this.showDivider = true});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Column(
       children: [
         Padding(
@@ -118,9 +110,9 @@ class _ActivityItem extends StatelessWidget {
                 imageUrl: activity.profileImage,
                 status: activity.status,
               ),
-              
+
               const SizedBox(width: 12),
-              
+
               // Activity details
               Expanded(
                 child: Column(
@@ -143,7 +135,7 @@ class _ActivityItem extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // Amount and time
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -169,12 +161,9 @@ class _ActivityItem extends StatelessWidget {
             ],
           ),
         ),
-        
+
         if (showDivider)
-          Divider(
-            height: 1,
-            color: theme.colorScheme.outlineVariant,
-          ),
+          Divider(height: 1, color: theme.colorScheme.outlineVariant),
       ],
     );
   }
@@ -219,7 +208,7 @@ class _ProfileAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Stack(
       children: [
         // Avatar
@@ -227,7 +216,7 @@ class _ProfileAvatar extends StatelessWidget {
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: theme.colorScheme.primary.withOpacity(0.1),
+            color: theme.colorScheme.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(24),
           ),
           child: imageUrl != null
@@ -243,7 +232,7 @@ class _ProfileAvatar extends StatelessWidget {
                 )
               : _buildInitialsAvatar(theme),
         ),
-        
+
         // Status indicator
         Positioned(
           bottom: 0,
@@ -253,10 +242,7 @@ class _ProfileAvatar extends StatelessWidget {
             height: 16,
             decoration: BoxDecoration(
               color: _getStatusColor(theme),
-              border: Border.all(
-                color: theme.colorScheme.surface,
-                width: 2,
-              ),
+              border: Border.all(color: theme.colorScheme.surface, width: 2),
               borderRadius: BorderRadius.circular(8),
             ),
           ),
@@ -271,7 +257,7 @@ class _ProfileAvatar extends StatelessWidget {
         .map((word) => word.isNotEmpty ? word[0].toUpperCase() : '')
         .take(2)
         .join();
-    
+
     return Center(
       child: Text(
         initials,

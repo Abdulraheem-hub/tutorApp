@@ -1,17 +1,20 @@
-/**
- * @context7:feature:students
- * @context7:dependencies:flutter,student_entities
- * @context7:pattern:page_widget
- * 
- * Students page with search, filters, and student list
- */
+/// @context7:feature:students
+/// @context7:dependencies:flutter,student_entities,flutter_bloc
+/// @context7:pattern:page_widget
+///
+/// Students page with search, filters, and student list using BLoC
+library;
 
 import 'package:flutter/material.dart';
-import '../../domain/entities/student_entities.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/students_header.dart';
 import '../widgets/students_search.dart';
 import '../widgets/students_filters.dart';
 import '../widgets/students_list.dart';
+import '../bloc/students_bloc.dart';
+import '../bloc/students_event.dart';
+import '../bloc/students_state.dart';
+import '../utils/student_mapper.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/constants/app_constants.dart';
 
@@ -23,142 +26,19 @@ class StudentsPage extends StatefulWidget {
 }
 
 class _StudentsPageState extends State<StudentsPage> {
-  String _searchQuery = '';
   String _selectedFilter = 'All';
-  List<Student> _filteredStudents = [];
-
-  // Mock data based on the image
-  final List<Student> _allStudents = [
-    Student(
-      id: '1',
-      name: 'Ahmed Hassan',
-      grade: Grade.grade8,
-      subjects: [const Subject(id: '1', name: 'Mathematics', shortName: 'Math')],
-      monthlyFee: 80.0,
-      paymentStatus: PaymentStatus.paid,
-      nextPaymentDate: DateTime(2024, 1, 15),
-      joinDate: DateTime(2023, 9, 1),
-      admissionNumber: '#204001',
-      admissionDate: DateTime(2024, 1, 15),
-      address: 'House 123, Street 5, Gulshan-e-Iqbal, Karachi',
-      phoneNumber: '+92 300 1234567',
-      email: 'ahmed.hassan@email.com',
-    ),
-    Student(
-      id: '2',
-      name: 'Mike Chen',
-      grade: Grade.grade10,
-      subjects: [
-        const Subject(id: '2', name: 'Physics', shortName: 'Physics'),
-        const Subject(id: '3', name: 'Chemistry', shortName: 'Chemistry'),
-      ],
-      monthlyFee: 120.0,
-      paymentStatus: PaymentStatus.pending,
-      nextPaymentDate: DateTime(2024, 1, 10),
-      joinDate: DateTime(2023, 8, 15),
-      admissionNumber: '#204002',
-      admissionDate: DateTime(2023, 8, 15),
-      address: 'Apartment 45, Block B, DHA Phase 2, Karachi',
-      phoneNumber: '+92 321 9876543',
-      email: 'mike.chen@email.com',
-    ),
-    Student(
-      id: '3',
-      name: 'Emma Davis',
-      grade: Grade.grade9,
-      subjects: [
-        const Subject(id: '4', name: 'English', shortName: 'English'),
-        const Subject(id: '5', name: 'Math', shortName: 'Math'),
-      ],
-      monthlyFee: 60.0,
-      paymentStatus: PaymentStatus.overdue,
-      nextPaymentDate: DateTime(2023, 12, 25),
-      joinDate: DateTime(2023, 7, 20),
-    ),
-    Student(
-      id: '4',
-      name: 'Alex Rodriguez',
-      grade: Grade.grade12,
-      subjects: [const Subject(id: '6', name: 'Calculus', shortName: 'Calculus')],
-      monthlyFee: 100.0,
-      paymentStatus: PaymentStatus.paid,
-      nextPaymentDate: DateTime(2024, 1, 20),
-      joinDate: DateTime(2023, 6, 10),
-    ),
-    Student(
-      id: '5',
-      name: 'Lily Wang',
-      grade: Grade.grade9,
-      subjects: [const Subject(id: '7', name: 'Biology', shortName: 'Biology')],
-      monthlyFee: 90.0,
-      paymentStatus: PaymentStatus.newStudent,
-      nextPaymentDate: DateTime(2024, 1, 25),
-      joinDate: DateTime(2024, 1, 1),
-    ),
-    Student(
-      id: '6',
-      name: 'James Wilson',
-      grade: Grade.grade7,
-      subjects: [const Subject(id: '8', name: 'Science', shortName: 'Science')],
-      monthlyFee: 70.0,
-      paymentStatus: PaymentStatus.paid,
-      nextPaymentDate: DateTime(2024, 1, 18),
-      joinDate: DateTime(2023, 5, 5),
-    ),
-  ];
 
   @override
   void initState() {
     super.initState();
-    _filteredStudents = _allStudents;
-  }
-
-  void _updateSearch(String query) {
-    setState(() {
-      _searchQuery = query;
-      _applyFilters();
+    // Load students when the page is initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<StudentsBloc>().add(const LoadStudents());
     });
-  }
-
-  void _updateFilter(String filter) {
-    setState(() {
-      _selectedFilter = filter;
-      _applyFilters();
-    });
-  }
-
-  void _applyFilters() {
-    _filteredStudents = _allStudents.where((student) {
-      // Apply search filter
-      bool matchesSearch = _searchQuery.isEmpty ||
-          student.name.toLowerCase().contains(_searchQuery.toLowerCase());
-
-      // Apply category filter
-      bool matchesFilter = _selectedFilter == 'All' ||
-          student.grade.category == _selectedFilter;
-
-      return matchesSearch && matchesFilter;
-    }).toList();
-  }
-
-  StudentsData get _studentsData {
-    final statusCounts = <PaymentStatus, int>{};
-    for (final status in PaymentStatus.values) {
-      statusCounts[status] = _allStudents
-          .where((student) => student.paymentStatus == status)
-          .length;
-    }
-
-    return StudentsData(
-      students: _filteredStudents,
-      statusCounts: statusCounts,
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final studentsData = _studentsData;
-
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       body: SafeArea(
@@ -173,19 +53,131 @@ class _StudentsPageState extends State<StudentsPage> {
 
             // Search bar
             StudentsSearch(
-              onSearchChanged: _updateSearch,
+              onSearchChanged: (query) {
+                context.read<StudentsBloc>().add(SearchStudents(query));
+              },
             ),
 
             // Filter tabs
             StudentsFilters(
               selectedFilter: _selectedFilter,
-              onFilterChanged: _updateFilter,
+              onFilterChanged: (filter) {
+                setState(() {
+                  _selectedFilter = filter;
+                });
+                String blocFilter = 'all';
+                switch (filter) {
+                  case 'Grade 1-5':
+                  case 'Grade 6-10':
+                  case 'High School':
+                    blocFilter = 'active'; // For now, map to active
+                    break;
+                  default:
+                    blocFilter = 'all';
+                }
+                context.read<StudentsBloc>().add(FilterStudents(blocFilter));
+              },
             ),
 
-            // Students list
+            // Students list with BLoC state management
             Expanded(
-              child: StudentsList(
-                students: studentsData.students,
+              child: BlocBuilder<StudentsBloc, StudentsState>(
+                builder: (context, state) {
+                  if (state is StudentsLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: AppTheme.primaryPurple,
+                      ),
+                    );
+                  } else if (state is StudentsLoaded) {
+                    // Convert StudentEntity to Student for UI
+                    final students = state.filteredStudents
+                        .map((entity) => StudentMapper.fromEntity(entity))
+                        .toList();
+
+                    return StudentsList(students: students);
+                  } else if (state is StudentsEmpty) {
+                    return const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.people_outline,
+                            size: 64,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'No students found',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'Add your first student to get started',
+                            style: TextStyle(fontSize: 14, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if (state is StudentsError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline,
+                            size: 64,
+                            color: Colors.red,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Error loading students',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.red,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            state.message,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.red,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              context.read<StudentsBloc>().add(
+                                const LoadStudents(),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppTheme.primaryPurple,
+                            ),
+                            child: const Text(
+                              'Retry',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  // Default fallback
+                  return const Center(
+                    child: CircularProgressIndicator(
+                      color: AppTheme.primaryPurple,
+                    ),
+                  );
+                },
               ),
             ),
           ],

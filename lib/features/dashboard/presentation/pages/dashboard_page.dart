@@ -1,10 +1,9 @@
-/**
- * @context7:feature:dashboard
- * @context7:dependencies:flutter_bloc,dashboard_bloc
- * @context7:pattern:page_widget
- * 
- * Main dashboard page following the TutorPay design
- */
+/// @context7:feature:dashboard
+/// @context7:dependencies:flutter_bloc,dashboard_bloc
+/// @context7:pattern:page_widget
+///
+/// Main dashboard page following the TutorPay design
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +35,13 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, AppRoutes.developerTools);
+        },
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        child: const Icon(Icons.build, color: Colors.white),
+      ),
       body: SafeArea(
         child: BlocBuilder<DashboardBloc, DashboardState>(
           builder: (context, state) {
@@ -46,10 +52,8 @@ class _DashboardPageState extends State<DashboardPage> {
               child: CustomScrollView(
                 slivers: [
                   // Header with greeting and settings
-                  const SliverToBoxAdapter(
-                    child: DashboardHeader(),
-                  ),
-                  
+                  const SliverToBoxAdapter(child: DashboardHeader()),
+
                   // Main content
                   SliverToBoxAdapter(
                     child: Padding(
@@ -58,18 +62,19 @@ class _DashboardPageState extends State<DashboardPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 8),
-                          
+
                           // Loading or Error States
                           if (state is DashboardLoading)
                             const _LoadingWidget()
                           else if (state is DashboardError)
                             _ErrorWidget(message: state.message)
-                          else if (state is DashboardLoaded || state is DashboardRefreshing)
+                          else if (state is DashboardLoaded ||
+                              state is DashboardRefreshing)
                             _DashboardContent(
                               state: state,
                               isRefreshing: state is DashboardRefreshing,
                             ),
-                          
+
                           const SizedBox(height: 20),
                         ],
                       ),
@@ -89,10 +94,7 @@ class _DashboardContent extends StatelessWidget {
   final DashboardState state;
   final bool isRefreshing;
 
-  const _DashboardContent({
-    required this.state,
-    this.isRefreshing = false,
-  });
+  const _DashboardContent({required this.state, this.isRefreshing = false});
 
   @override
   Widget build(BuildContext context) {
@@ -108,14 +110,14 @@ class _DashboardContent extends StatelessWidget {
           dashboardData: dashboardData,
           isRefreshing: isRefreshing,
         ),
-        
+
         const SizedBox(height: 24),
-        
+
         // Quick Actions
         const DashboardQuickActions(),
-        
+
         const SizedBox(height: 24),
-        
+
         // Recent Activity
         DashboardRecentActivity(
           activities: dashboardData.recentActivity,

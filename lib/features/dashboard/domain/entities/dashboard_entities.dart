@@ -1,10 +1,9 @@
-/**
- * @context7:feature:dashboard
- * @context7:dependencies:equatable
- * @context7:pattern:domain_entity
- * 
- * Domain entities for dashboard feature
- */
+/// @context7:feature:dashboard
+/// @context7:dependencies:equatable
+/// @context7:pattern:domain_entity
+/// 
+/// Domain entities for dashboard feature
+library;
 
 import 'package:equatable/equatable.dart';
 

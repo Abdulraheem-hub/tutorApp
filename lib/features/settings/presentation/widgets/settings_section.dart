@@ -1,9 +1,8 @@
-/**
- * @context7:feature:settings
- * @context7:pattern:widget_component
- * 
- * Settings section wrapper widget
- */
+/// @context7:feature:settings
+/// @context7:pattern:widget_component
+/// 
+/// Settings section wrapper widget
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -44,7 +43,7 @@ class SettingsSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 blurRadius: 10,
                 offset: const Offset(0, 2),
               ),
@@ -62,7 +61,7 @@ class SettingsSection extends StatelessWidget {
                     Divider(
                       height: 1,
                       thickness: 1,
-                      color: AppTheme.textLight.withOpacity(0.1),
+                      color: AppTheme.textLight.withValues(alpha: 0.1),
                       indent: 16,
                       endIndent: 16,
                     ),

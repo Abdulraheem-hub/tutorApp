@@ -1,9 +1,8 @@
-/**
- * @context7:feature:constants
- * @context7:pattern:app_constants
- * 
- * Application-wide constants for TutorPay app
- */
+/// @context7:feature:constants
+/// @context7:pattern:app_constants
+///
+/// Application-wide constants for TutorPay app
+library;
 
 class AppConstants {
   // App Information
@@ -47,6 +46,8 @@ class AppRoutes {
   static const String studentDetail = '/student-detail';
   static const String paymentDetail = '/payment-detail';
   static const String paymentConfirmation = '/payment-confirmation';
+  static const String paymentCardDemo = '/payment-card-demo';
+  static const String developerTools = '/developer-tools';
 }
 
 class AppAssets {

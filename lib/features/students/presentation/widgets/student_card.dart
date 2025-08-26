@@ -1,9 +1,8 @@
-/**
- * @context7:feature:students
- * @context7:pattern:widget_component
- * 
- * Individual student card displaying student information
- */
+/// @context7:feature:students
+/// @context7:pattern:widget_component
+///
+/// Individual student card displaying student information
+library;
 
 import 'package:flutter/material.dart';
 import '../../domain/entities/student_entities.dart';
@@ -14,11 +13,7 @@ class StudentCard extends StatelessWidget {
   final Student student;
   final VoidCallback? onTap;
 
-  const StudentCard({
-    super.key,
-    required this.student,
-    this.onTap,
-  });
+  const StudentCard({super.key, required this.student, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +28,7 @@ class StudentCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -81,25 +76,44 @@ class StudentCard extends StatelessWidget {
 
                   const SizedBox(height: 8),
 
-                  // Fee and Next Payment
+                  // Fee and Payment Status
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '${AppUtils.formatCurrency(student.monthlyFee)}/month',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppTheme.textDark,
-                        ),
-                      ),
-                      if (student.nextPaymentDate != null)
-                        Text(
-                          _getNextPaymentText(),
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: AppTheme.textLight,
-                            fontWeight: FontWeight.w500,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${AppUtils.formatCurrency(student.monthlyFee)}/month',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: AppTheme.textDark,
+                            ),
                           ),
-                        ),
+                          if (student.outstandingBalance > 0)
+                            Text(
+                              'Due: ${AppUtils.formatCurrency(student.totalAmountDue)}',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: AppTheme.errorColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          if (student.nextPaymentDate != null)
+                            Text(
+                              _getNextPaymentText(),
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: AppTheme.textLight,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          _buildCurrentMonthStatus(),
+                        ],
+                      ),
                     ],
                   ),
                 ],
@@ -128,7 +142,7 @@ class StudentCard extends StatelessWidget {
       width: 48,
       height: 48,
       decoration: BoxDecoration(
-        color: avatarColor.withOpacity(0.1),
+        color: avatarColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(24),
       ),
       child: student.profileImage != null
@@ -205,6 +219,42 @@ class StudentCard extends StatelessWidget {
     );
   }
 
+  Widget _buildCurrentMonthStatus() {
+    if (student.currentMonthPaid) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        decoration: BoxDecoration(
+          color: AppTheme.greenPositive,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Text(
+          'Current Month Paid',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        decoration: BoxDecoration(
+          color: AppTheme.orangePending,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Text(
+          'Current Month Due',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
+    }
+  }
+
   String _getSubjectsText() {
     if (student.subjects.isEmpty) return 'No subjects';
     if (student.subjects.length == 1) {
@@ -215,7 +265,7 @@ class StudentCard extends StatelessWidget {
 
   String _getNextPaymentText() {
     if (student.nextPaymentDate == null) return '';
-    
+
     final now = DateTime.now();
     final nextPayment = student.nextPaymentDate!;
     final difference = nextPayment.difference(now).inDays;

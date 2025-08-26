@@ -1,9 +1,8 @@
-/**
- * @context7:feature:payment_settings
- * @context7:pattern:modal_sheet
- * 
- * Bottom sheet for adding new payment options that students can use
- */
+/// @context7:feature:payment_settings
+/// @context7:pattern:modal_sheet
+/// 
+/// Bottom sheet for adding new payment options that students can use
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -61,7 +60,7 @@ class _AddPaymentMethodSheetState extends State<AddPaymentMethodSheet> {
                       width: 40,
                       height: 4,
                       decoration: BoxDecoration(
-                        color: AppTheme.textLight.withOpacity(0.3),
+                        color: AppTheme.textLight.withValues(alpha: 0.3),
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -113,13 +112,13 @@ class _AddPaymentMethodSheetState extends State<AddPaymentMethodSheet> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                          color: AppTheme.textLight.withOpacity(0.3),
+                          color: AppTheme.textLight.withValues(alpha: 0.3),
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                          color: AppTheme.textLight.withOpacity(0.3),
+                          color: AppTheme.textLight.withValues(alpha: 0.3),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -158,13 +157,13 @@ class _AddPaymentMethodSheetState extends State<AddPaymentMethodSheet> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                          color: AppTheme.textLight.withOpacity(0.3),
+                          color: AppTheme.textLight.withValues(alpha: 0.3),
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide(
-                          color: AppTheme.textLight.withOpacity(0.3),
+                          color: AppTheme.textLight.withValues(alpha: 0.3),
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -223,7 +222,7 @@ class _AddPaymentMethodSheetState extends State<AddPaymentMethodSheet> {
   Widget _buildPaymentTypeSelector() {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppTheme.textLight.withOpacity(0.3)),
+        border: Border.all(color: AppTheme.textLight.withValues(alpha: 0.3)),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
@@ -238,7 +237,7 @@ class _AddPaymentMethodSheetState extends State<AddPaymentMethodSheet> {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? AppTheme.primaryPurple.withOpacity(0.1)
+                      ? AppTheme.primaryPurple.withValues(alpha: 0.1)
                       : null,
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -334,15 +333,15 @@ class _AddPaymentMethodSheetState extends State<AddPaymentMethodSheet> {
   Color _getTypeIconBackgroundColor(PaymentMethodType type) {
     switch (type) {
       case PaymentMethodType.upi:
-        return AppTheme.successColor.withOpacity(0.1);
+        return AppTheme.successColor.withValues(alpha: 0.1);
       case PaymentMethodType.cash:
-        return AppTheme.warningColor.withOpacity(0.1);
+        return AppTheme.warningColor.withValues(alpha: 0.1);
       case PaymentMethodType.creditCard:
-        return AppTheme.primaryPurple.withOpacity(0.1);
+        return AppTheme.primaryPurple.withValues(alpha: 0.1);
       case PaymentMethodType.debitCard:
-        return AppTheme.warningColor.withOpacity(0.1);
+        return AppTheme.warningColor.withValues(alpha: 0.1);
       case PaymentMethodType.bankTransfer:
-        return AppTheme.infoColor.withOpacity(0.1);
+        return AppTheme.infoColor.withValues(alpha: 0.1);
     }
   }
 

@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Temporary: Allow test user for development
+    match /users/test-user-123/{document=**} {
+      allow read, write: if true;
+    }
+    
+    // Users can only access their own data (including anonymous users)
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      // Students subcollection - users can only access their own students
+      match /students/{studentId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+      
+      // Payments subcollection - users can only access their own payments
+      match /payments/{paymentId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+      
+      // Sessions subcollection - users can only access their own sessions
+      match /sessions/{sessionId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+    
+    // Global settings or public data (if needed in the future)
+    match /settings/{document} {
+      allow read: if request.auth != null;
+      allow write: if false; // Only allow through admin SDK
+    }
+  }
+}

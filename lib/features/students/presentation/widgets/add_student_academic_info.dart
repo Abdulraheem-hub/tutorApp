@@ -1,9 +1,8 @@
-/**
- * @context7:feature:students
- * @context7:pattern:widget_component
- * 
- * Academic information form for add student step 2
- */
+/// @context7:feature:students
+/// @context7:pattern:widget_component
+/// 
+/// Academic information form for add student step 2
+library;
 
 import 'package:flutter/material.dart';
 import '../../domain/entities/student_entities.dart';

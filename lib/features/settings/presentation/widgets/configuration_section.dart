@@ -1,11 +1,10 @@
-/**
- * @context7:feature:app_configuration
- * @context7:pattern:widget_component
- * @context7:dependencies:flutter/material.dart
- * 
- * Reusable configuration section widget for displaying and managing
- * a list of configurable items (grades or subjects) with add, edit, delete actions
- */
+/// @context7:feature:app_configuration
+/// @context7:pattern:widget_component
+/// @context7:dependencies:flutter/material.dart
+/// 
+/// Reusable configuration section widget for displaying and managing
+/// a list of configurable items (grades or subjects) with add, edit, delete actions
+library;
 
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
@@ -50,7 +49,7 @@ class ConfigurationSection extends StatelessWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: iconColor.withOpacity(0.1),
+                color: iconColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(icon, size: 20, color: iconColor),
@@ -81,7 +80,7 @@ class ConfigurationSection extends StatelessWidget {
               onPressed: onAddItem,
               icon: const Icon(Icons.add, color: AppTheme.primaryPurple),
               style: IconButton.styleFrom(
-                backgroundColor: AppTheme.primaryPurple.withOpacity(0.1),
+                backgroundColor: AppTheme.primaryPurple.withValues(alpha: 0.1),
                 padding: const EdgeInsets.all(8),
               ),
             ),
@@ -105,7 +104,7 @@ class ConfigurationSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.textLight.withOpacity(0.2)),
+        border: Border.all(color: AppTheme.textLight.withValues(alpha: 0.2)),
       ),
       child: Column(
         children: [
@@ -113,7 +112,7 @@ class ConfigurationSection extends StatelessWidget {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: iconColor.withOpacity(0.1),
+              color: iconColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(30),
             ),
             child: Icon(icon, size: 24, color: iconColor),
@@ -144,7 +143,7 @@ class ConfigurationSection extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.textLight.withOpacity(0.2)),
+        border: Border.all(color: AppTheme.textLight.withValues(alpha: 0.2)),
       ),
       child: ListView.builder(
         shrinkWrap: true,
@@ -157,13 +156,13 @@ class ConfigurationSection extends StatelessWidget {
               border: index < items.length - 1
                   ? Border(
                       bottom: BorderSide(
-                        color: AppTheme.textLight.withOpacity(0.1),
+                        color: AppTheme.textLight.withValues(alpha: 0.1),
                       ),
                     )
                   : null,
             ),
             child: Dismissible(
-              key: Key('${title}_${index}'),
+              key: Key('${title}_$index'),
               direction: DismissDirection.endToStart,
               confirmDismiss: (direction) async {
                 return await _showDeleteConfirmation(context, item);

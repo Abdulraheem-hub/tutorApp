@@ -1,10 +1,9 @@
-/**
- * @context7:feature:students
- * @context7:dependencies:flutter,student_entities,payment,pdf
- * @context7:pattern:page_widget
- * 
- * Payment confirmation page with receipt functionality
- */
+/// @context7:feature:students
+/// @context7:dependencies:flutter,student_entities,payment,pdf
+/// @context7:pattern:page_widget
+///
+/// Payment confirmation page with receipt functionality
+library;
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -104,10 +103,12 @@ class _PaymentConfirmationPageState extends State<PaymentConfirmationPage>
       );
     }
 
-    return WillPopScope(
-      onWillPop: () async {
-        _navigateToStudents();
-        return false;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          _navigateToStudents();
+        }
       },
       child: Scaffold(
         backgroundColor: AppTheme.backgroundColor,
@@ -185,7 +186,7 @@ class _PaymentConfirmationPageState extends State<PaymentConfirmationPage>
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF10B981).withOpacity(0.3),
+                  color: const Color(0xFF10B981).withValues(alpha: 0.3),
                   blurRadius: 20,
                   offset: const Offset(0, 8),
                 ),
@@ -197,7 +198,7 @@ class _PaymentConfirmationPageState extends State<PaymentConfirmationPage>
                   width: 80,
                   height: 80,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(40),
                   ),
                   child: const Icon(
@@ -228,7 +229,7 @@ class _PaymentConfirmationPageState extends State<PaymentConfirmationPage>
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -252,17 +253,18 @@ class _PaymentConfirmationPageState extends State<PaymentConfirmationPage>
     return AnimatedBuilder(
       animation: _contentAnimation,
       builder: (context, child) {
+        final animationValue = _contentAnimation.value.clamp(0.0, 1.0);
         return Transform.translate(
-          offset: Offset(0, 50 * (1 - _contentAnimation.value)),
+          offset: Offset(0, 50 * (1 - animationValue)),
           child: Opacity(
-            opacity: _contentAnimation.value,
+            opacity: animationValue,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -291,7 +293,7 @@ class _PaymentConfirmationPageState extends State<PaymentConfirmationPage>
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppTheme.primaryPurple.withOpacity(0.1),
+              color: AppTheme.primaryPurple.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: const Icon(
@@ -399,10 +401,11 @@ class _PaymentConfirmationPageState extends State<PaymentConfirmationPage>
     return AnimatedBuilder(
       animation: _contentAnimation,
       builder: (context, child) {
+        final animationValue = _contentAnimation.value.clamp(0.0, 1.0);
         return Transform.translate(
-          offset: Offset(0, 30 * (1 - _contentAnimation.value)),
+          offset: Offset(0, 30 * (1 - animationValue)),
           child: Opacity(
-            opacity: _contentAnimation.value,
+            opacity: animationValue,
             child: Column(
               children: [
                 Row(
@@ -493,7 +496,7 @@ class _PaymentConfirmationPageState extends State<PaymentConfirmationPage>
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: hasBorder
-              ? BorderSide(color: AppTheme.primaryPurple.withOpacity(0.3))
+              ? BorderSide(color: AppTheme.primaryPurple.withValues(alpha: 0.3))
               : BorderSide.none,
         ),
         elevation: 0,
@@ -519,16 +522,16 @@ class _PaymentConfirmationPageState extends State<PaymentConfirmationPage>
       await file.writeAsString(receiptContent);
 
       // Hide loading
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
 
       // Show success message
-      _showSuccessSnackBar('Receipt downloaded to ${file.path}');
+      if (mounted) _showSuccessSnackBar('Receipt downloaded to ${file.path}');
 
       // Copy path to clipboard
       await Clipboard.setData(ClipboardData(text: file.path));
     } catch (e) {
-      Navigator.pop(context);
-      _showErrorSnackBar('Failed to download receipt: $e');
+      if (mounted) Navigator.pop(context);
+      if (mounted) _showErrorSnackBar('Failed to download receipt: $e');
     }
   }
 
